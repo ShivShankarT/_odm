@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
 import '../menu_item.dart';
 import '../navigation_bloc.dart';
 
@@ -22,7 +23,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
   void initState() {
     super.initState();
     _animationController = AnimationController(vsync: this, duration: _animationDuration);
- //   isSidebarOpenedStreamController = PublishSubject<bool>();
+     isSidebarOpenedStreamController = PublishSubject<bool>();
     isSidebarOpenedStream = isSidebarOpenedStreamController.stream;
     isSidebarOpenedSink = isSidebarOpenedStreamController.sink;
   }
@@ -71,18 +72,18 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 100,
+                        height: 80,
                       ),
                       ListTile(
                         title: Text(
-                          "Prateek",
-                          style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800),
+                          "Shiv Tiwari",
+                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
                         ),
                         subtitle: Text(
-                          "www.techieblossom.com",
+                          "shiv.shankar@esecforte.com",
                           style: TextStyle(
                             color: Color(0xFF1BB5FD),
-                            fontSize: 18,
+                            fontSize: 15,
                           ),
                         ),
                         leading: CircleAvatar(
@@ -94,7 +95,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         ),
                       ),
                       Divider(
-                        height: 64,
+                        height: 60,
                         thickness: 0.5,
                         color: Colors.white.withOpacity(0.3),
                         indent: 32,
@@ -109,39 +110,54 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         },
                       ),
                       MenuItem(
-                        icon: Icons.person,
-                        title: "My Account",
+                        icon: Icons.format_quote,
+                        title: "Quotations",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyAccountClickedEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyQuotationClickedEvent);
                         },
                       ),
                       MenuItem(
-                        icon: Icons.shopping_basket,
-                        title: "My Orders",
+                        icon: Icons.business_center,
+                        title: "Work Orders",
                         onTap: () {
                           onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyOrdersClickedEvent);
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyWorkOrdersClickedEvent);
                         },
                       ),
                       MenuItem(
-                        icon: Icons.card_giftcard,
-                        title: "Wishlist",
-                      ),
-                      Divider(
-                        height: 64,
-                        thickness: 0.5,
-                        color: Colors.white.withOpacity(0.3),
-                        indent: 32,
-                        endIndent: 32,
+                        icon: Icons.event_note,
+                        title: "Purchase Order",
+
+                        onTap: () {
+                          onIconPressed();
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyPurchaseOrderClickedEvent);
+                        },
                       ),
                       MenuItem(
-                        icon: Icons.settings,
-                        title: "Settings",
+                        icon: Icons.note,
+                        title: "Invoices",
+                        onTap: () {
+                          onIconPressed();
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyInvoicesClickedEvent);
+                        },
+                      ),
+
+                      MenuItem(
+                        icon: Icons.settings_applications,
+                        title: "Change Password",
+                        onTap: () {
+                          onIconPressed();
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyChangePasswordClickedEvent);
+                        },
                       ),
                       MenuItem(
                         icon: Icons.exit_to_app,
                         title: "Logout",
+                        onTap: () {
+                          onIconPressed();
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);
+                        },
                       ),
                     ],
                   ),

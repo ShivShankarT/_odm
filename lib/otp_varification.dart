@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:odm/drawable_screen.dart';
 import 'package:odm/services/otp_service.dart';
+import 'package:odm/sidebar/sidebar_layout.dart';
 
 class OtpVerification extends StatefulWidget {
   @override
@@ -46,7 +46,7 @@ class _OtpVerificationState extends State<OtpVerification> {
 
           Navigator.of(context)
               .push(MaterialPageRoute<Null>(builder: (BuildContext context) {
-            return new  DrawablePage();
+            return new  SideBarLayout();
           }));},
         child: Text("Submit OTP",
             textAlign: TextAlign.center,
