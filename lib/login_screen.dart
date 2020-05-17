@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:odm/otp_varification.dart';
 import 'package:odm/services/login_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'models/login_response.dart';
 
 
@@ -45,9 +47,10 @@ class _MyHomePageState extends State<Login> {
   @override
   Widget build(BuildContext context) {
 
-    var emailField = TextField(
+    var emailField = TextFormField(
+      textInputAction: TextInputAction.next,
+      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
       controller: myEmailController,
-      obscureText: false,
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -56,13 +59,10 @@ class _MyHomePageState extends State<Login> {
           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
-    var passwordField = TextField(
+    var passwordField = TextFormField(
       obscureText: false,
       controller: myPasswordController,
-      onSubmitted: (Text){
-        password=Text;
-        print(password);
-      },
+      onFieldSubmitted: (_) =>  FocusScope.of(context).unfocus(),
       style: style,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -74,64 +74,63 @@ class _MyHomePageState extends State<Login> {
     final loginButon = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Colors.green,
+      color: Colors.blue,
       child: MaterialButton(
+         child: Text("Login",
+
+           style: TextStyle(
+               fontSize: 20,
+               color: Colors.white),
+             ),
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
 
-         setState(() {
-           userName=myEmailController.text;
-           password=myPasswordController.text;
-           print(userName);
-           print(password);
-         });
-        /* final x =await LoginService.login(
-             user: userName,
-             password: password,
-             mobile: "1"
-         );
-         print("here is the x valu");
-         print(x.toJson());
-         if(x!=null){
-           var otp=x.data[1];
+          setState(() {
+            userName = myEmailController.text;
+            password = myPasswordController.text;
+            print(userName);
+            print(password);
+          });
 
-           print("this is opt:");
-           print(otp);
-           print("this is access token:");
-           var accessToken=x.data[1];
-           print(accessToken);
-           final error=x.error;
-         *//*  if(error==false)
-             {*//*
-               Navigator.of(context)
-                   .push(MaterialPageRoute<Null>(
-                    builder: (BuildContext context) {
+          final x = await LoginService.login(
+              user: userName,
+              password: password,
+              mobile: "1"
+          );
 
-                 return new OtpVerification();
-               })
-               );
-             }
-           final data = x.data;
-           if(data!=null && data.length>0)
-           {
-             LoginData required = data[0];
-             print(required.toJson());
-             print("OTP"+required.otp);
-           }*/
+          print("here is the x valu");
+          print(x.toJson());
+          if (x != null) {
+            final error = x.error;
+            if (error == false) {
 
-         Navigator.of(context)
-             .push(MaterialPageRoute<Null>(
-             builder: (BuildContext context) {return new OtpVerification();}
-             ));
+              final data = x.data;
 
-          },
-        child: Text("Login",
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-    );
+              if (data != null && data.length > 0)  {
+
+                LoginData required = data[0];
+
+                print(required.toJson());
+              }
+
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('OTP',data[0].otp );
+                prefs.setString('Access_Token', data[0].accessToken);
+
+
+              print("running push screen .........");
+              Navigator.of(context)
+                  .push(MaterialPageRoute<Null>(
+                  builder: (BuildContext context) =>
+                     new OtpVerification(),
+                )
+              );
+            }
+
+          }
+        }
+        ));
 
     return Scaffold(
         body: SingleChildScrollView(

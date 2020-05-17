@@ -2,23 +2,60 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:odm/login_screen.dart';
+import 'package:odm/models/otp_response.dart';
+import 'package:odm/services/logout_service.dart';
+import 'package:odm/sidebar/sidebar_layout.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../menu_item.dart';
 import '../navigation_bloc.dart';
 
 
-class SideBar extends StatefulWidget {
+class SideBar extends StatefulWidget  {
+  var myName=TextEditingController();
   @override
   _SideBarState createState() => _SideBarState();
 }
 
-class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<SideBar> {
+class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<SideBar>  {
+
+  var name;
+  final profile=new Container (
+    child: ListTile(
+      title: Text ('name'),
+      subtitle: Text(
+        "shiv.shankar@esecforte.com",
+        style: TextStyle(
+          color: Color(0xFF1BB5FD),
+          fontSize: 15,
+        ),
+      ),
+      leading: CircleAvatar(
+        child: Icon(
+          Icons.perm_identity,
+          color: Colors.white,
+        ),
+        radius: 40,
+      ),
+    ),
+  );
   AnimationController _animationController;
   StreamController<bool> isSidebarOpenedStreamController;
   Stream<bool> isSidebarOpenedStream;
   StreamSink<bool> isSidebarOpenedSink;
   final _animationDuration = const Duration(milliseconds: 500);
 
+  @override
+  void setState(fn)  async{
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    name = prefs.getString('FNAME');
+    print(name);
+    super.setState(fn);
+  }
   @override
   void initState() {
     super.initState();
@@ -53,11 +90,11 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return StreamBuilder<bool>(
+    return StreamBuilder<bool>  (
       initialData: false,
       stream: isSidebarOpenedStream,
       builder: (context, isSideBarOpenedAsync) {
-        return AnimatedPositioned(
+        return AnimatedPositioned (
           duration: _animationDuration,
           top: 0,
           bottom: 0,
@@ -74,25 +111,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                       SizedBox(
                         height: 80,
                       ),
-                      ListTile(
-                        title: Text(
-                          "Shiv Tiwari",
-                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
-                        ),
-                        subtitle: Text(
-                          "shiv.shankar@esecforte.com",
-                          style: TextStyle(
-                            color: Color(0xFF1BB5FD),
-                            fontSize: 15,
-                          ),
-                        ),
-                        leading: CircleAvatar(
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Colors.white,
-                          ),
-                          radius: 40,
-                        ),
+                      Container(
+                        child:  profile,
                       ),
                       Divider(
                         height: 60,
@@ -155,8 +175,39 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         icon: Icons.exit_to_app,
                         title: "Logout",
                         onTap: () {
-                          onIconPressed();
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);
+                          Alert(
+                            context: context,
+                            type: AlertType.warning,
+                            title: "Do You Want To Logout !",
+                            desc: "Flutter is more awesome with RFlutter Alert.",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "NO",
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                gradient: LinearGradient(colors: [
+                                  Color.fromRGBO(116, 116, 191, 1.0),
+                                  Color.fromRGBO(52, 138, 199, 1.0)
+                                ]),
+                              ),
+                              DialogButton(
+                                child: Text(
+                                  "YES",
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => _logout(),
+                                gradient: LinearGradient(colors: [
+                                  Color.fromRGBO(116, 116, 191, 1.0),
+                                  Color.fromRGBO(52, 138, 199, 1.0)
+                                ]),
+                              )
+                            ],
+                          ).show();
+                          onIconPressed(
+                          );
+                        /*  BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);*/
                         },
                       ),
                     ],
@@ -191,6 +242,25 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
         );
       },
     );
+  }
+
+  _logout() async {
+    final x = await LogoutService.logout();
+    print("here is the x valu");
+    print(x.toJson());
+    if (x != null) {
+      final error = x.error;
+      if (error == false) {
+        print("running changePassword screen .........");
+        Navigator.of(context)
+            .push(MaterialPageRoute<Null>(
+          builder: (BuildContext context) =>
+          new Login(),
+        )
+        );
+      }
+
+    }
   }
 }
 

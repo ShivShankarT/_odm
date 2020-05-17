@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:odm/sidebar/sidebar_layout.dart';
 import 'package:odm/splash_screen.dart';
 
 void main() => runApp(MyApp());

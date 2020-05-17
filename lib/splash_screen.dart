@@ -1,3 +1,6 @@
+import 'package:odm/pages/change_password.dart';
+import 'package:odm/pages/logout_sreen.dart';
+import 'package:odm/sidebar/sidebar_layout.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -13,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     margin: EdgeInsets.only(top: 250),
     child:Center(
 
-        child: Image.asset("assets/img/logo_big_splash.png",width: 200,height: 200,),
+       child: Image.asset("assets/img/logo_big_splash.png",width: 200,height: 200,),
     )
   );
   final belowSection = new Container(
@@ -40,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   route() {
     Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => LoginScreen()
+        builder: (context) => ChangePassword()
     )
     );
   }
