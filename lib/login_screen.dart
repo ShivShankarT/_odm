@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:odm/loader.dart';
 import 'package:odm/otp_varification.dart';
 import 'package:odm/services/login_service.dart';
+import 'package:odm/store/login_store.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'models/login_response.dart';
 
+import 'models/login_response.dart';
 
 class LoginScreen extends StatelessWidget {
   // This widget is the root of your application.
@@ -30,13 +33,10 @@ class Login extends StatefulWidget {
 
 class _MyHomePageState extends State<Login> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-
-  var userName;
-  var password;
   final myEmailController = TextEditingController();
   final myPasswordController = TextEditingController();
-
-
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  final GlobalKey<FormState> formKey = GlobalKey();
   @override
   void dispose() {
     myEmailController.dispose();
@@ -46,123 +46,126 @@ class _MyHomePageState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-
-    var emailField = TextFormField(
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-      controller: myEmailController,
-      style: style,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Email",
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-    );
-
-    var passwordField = TextFormField(
-      obscureText: false,
-      controller: myPasswordController,
-      onFieldSubmitted: (_) =>  FocusScope.of(context).unfocus(),
-      style: style,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Password",
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-    );
-
-    final loginButon = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(30.0),
-      color: Colors.blue,
-      child: MaterialButton(
-         child: Text("Login",
-
-           style: TextStyle(
-               fontSize: 20,
-               color: Colors.white),
-             ),
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () async {
-
-          setState(() {
-            userName = myEmailController.text;
-            password = myPasswordController.text;
-            print(userName);
-            print(password);
-          });
-
-          final x = await LoginService.login(
-              user: userName,
-              password: password,
-              mobile: "1"
-          );
-
-          print("here is the x valu");
-          print(x.toJson());
-          if (x != null) {
-            final error = x.error;
-            if (error == false) {
-
-              final data = x.data;
-
-              if (data != null && data.length > 0)  {
-
-                LoginData required = data[0];
-
-                print(required.toJson());
-              }
-
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setString('OTP',data[0].otp );
-                prefs.setString('Access_Token', data[0].accessToken);
-
-
-              print("running push screen .........");
-              Navigator.of(context)
-                  .push(MaterialPageRoute<Null>(
-                  builder: (BuildContext context) =>
-                     new OtpVerification(),
-                )
-              );
-            }
-
+    return Consumer<LoginStore>(
+        builder: (context, store, widget) {
+          if(store.loginData!=null){
+            WidgetsBinding.instance.addPostFrameCallback((_){
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (_)=>OtpVerification()
+              ));
+            });
+          } else if(store.error!=null){
+            WidgetsBinding.instance.addPostFrameCallback((_){
+              showSnack(store.error);
+              store.error = null;
+            });
           }
-        }
-        ));
-
-    return Scaffold(
-        body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(36.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                       Container( margin: EdgeInsets.only(top: 100),
-                         child: Image.asset("assets/img/logo_big.png"),
-                       ),
-                    SizedBox(height: 25.0),
-                    emailField,
-                    SizedBox(height: 25.0),
-                    passwordField,
-                    SizedBox(
-                      height: 35.0,
+          return Scaffold(
+            key: scaffoldKey,
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(36.0),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(top: 100),
+                              child: Image.asset("assets/img/logo_big.png"),
+                            ),
+                            SizedBox(height: 25.0),
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context)
+                                      .nextFocus(),
+                              controller: myEmailController,
+                              style: style,
+                              validator: (data){
+                                if(data.trim().isEmpty)
+                                  return "Invalid Username";
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                  EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                                  hintText: "Email",
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(32.0))),
+                            ),
+                            SizedBox(height: 25.0),
+                            TextFormField(
+                              obscureText: false,
+                              controller: myPasswordController,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context)
+                                      .unfocus(),
+                              style: style,
+                              validator: (data){
+                                if(data.trim().length<5)
+                                  return "Password Invalid";
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                  EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                                  hintText: "Password",
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(32.0))),
+                            ),
+                            SizedBox(
+                              height: 35.0,
+                            ),
+                        store.isLoggingIn ?Center(
+                          child: CircularProgressIndicator(),)
+                            :Material(
+                                elevation: 5.0,
+                                borderRadius: BorderRadius.circular(30.0),
+                                color: Colors.blue,
+                                child:  MaterialButton(
+                                    child: Text(
+                                      "Login",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.white),
+                                    ),
+                                    minWidth: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width,
+                                    padding: EdgeInsets.fromLTRB(
+                                        20.0, 15.0, 20.0, 15.0),
+                                    onPressed: ()  {
+                                      login(store);
+                                    })),
+                            SizedBox(
+                              height: 15.0,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    loginButon,
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-        )
+              ));
+        }
     );
+  }
+  void login(LoginStore loginStore){
+    if(formKey.currentState.validate()) {
+      String user = myEmailController.text.trim();
+      String password = myPasswordController.text.trim();
+      loginStore.login(user, password, "1");
+    }
+  }
+
+  void showSnack(String msg){
+    scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(msg),
+    ));
   }
 }

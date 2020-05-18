@@ -1,6 +1,6 @@
 class QuotationResponse {
   bool error;
-  List<Data> data;
+  List<QuotationData> data;
   String message;
   int rows;
   int perPage;
@@ -12,9 +12,9 @@ class QuotationResponse {
   QuotationResponse.fromJson(Map<String, dynamic> json) {
     error = json['error'];
     if (json['data'] != null) {
-      data = new List<Data>();
+      data = new List<QuotationData>();
       json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
+        data.add(new QuotationData.fromJson(v));
       });
     }
     message = json['message'];
@@ -37,13 +37,13 @@ class QuotationResponse {
   }
 }
 
-class Data {
+class QuotationData {
   int quotationId;
   String partyCompanyDisplay;
-  String quotationNo;
+  var quotationNo;
   String quotationDate;
   String quotationExpiryDate;
-  double quotationTotal;
+  var quotationTotal;
   String quotationStatus;
   String entityCompany;
   String entityCompanyDisplay;
@@ -51,7 +51,7 @@ class Data {
   String currencySymbol;
   String createdByName;
 
-  Data(
+  QuotationData(
       {this.quotationId,
         this.partyCompanyDisplay,
         this.quotationNo,
@@ -65,7 +65,7 @@ class Data {
         this.currencySymbol,
         this.createdByName});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  QuotationData.fromJson(Map<String, dynamic> json) {
     quotationId = json['quotation_id'];
     partyCompanyDisplay = json['party_company_display'];
     quotationNo = json['quotation_no'];

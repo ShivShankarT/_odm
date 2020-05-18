@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:odm/login_screen.dart';
 import 'package:odm/services/otp_service.dart';
 import 'package:odm/sidebar/sidebar_layout.dart';
+import 'package:odm/store/login_store.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/otp_response.dart';
@@ -16,8 +18,14 @@ class OtpVerification extends StatefulWidget {
 class _OtpVerificationState extends State<OtpVerification> {
 
   var otp;
-  final myOtpController = TextEditingController();
+  TextEditingController myOtpController;
 
+
+  @override
+  void initState() {
+    myOtpController = TextEditingController(text: Provider.of<LoginStore>(context, listen:false).loginData.otp);
+    super.initState();
+  }
   @override
   void dispose() {
     myOtpController.dispose();
