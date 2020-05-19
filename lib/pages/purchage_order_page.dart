@@ -1,14 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:odm/models/purchase_details.dart';
+import 'package:odm/models/purchase_response.dart';
+import 'package:odm/pages/widgets/purchase_widget.dart';
+import 'package:odm/store/purchase_store.dart';
+import 'package:provider/provider.dart';
 
 import '../navigation_bloc.dart';
-class PurchageOrderpage extends StatelessWidget with NavigationStates {
+class PurchageOrderpage extends StatefulWidget with NavigationStates {
+  @override
+  _PurchageOrderpageState createState() => _PurchageOrderpageState();
+}
+
+Future navigateToSubPage(context) async {
+  Navigator.push(
+      context, MaterialPageRoute(builder: (context) => PurchaseDetails()));
+}
+
+
+class _PurchageOrderpageState extends State<PurchageOrderpage> {
+  List<PurchaseOrderResponse> _listPurchseResponse = List<
+      PurchaseOrderResponse>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Text("Purchage Order" ,style: TextStyle(fontWeight: FontWeight.w900,fontSize: 28),),
-
-      ),
+    return Consumer<PurchaseStore>(
+        builder: (context, store, _) {
+          if (store.loading == false && store.purchaseOrderResponse == null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              store.loadPurchase();
+            });
+          }
+          return store.loading || store.purchaseOrderResponse == null ?
+          Center(child: CircularProgressIndicator(),)
+              : ListView.builder(
+            itemCount: store.purchaseOrderResponse.data.length,
+            itemBuilder: (context, index) =>
+                PurchaseWidget(
+                  purchaseData: store.purchaseOrderResponse.data[index],),
+          );
+        }
     );
   }
 }

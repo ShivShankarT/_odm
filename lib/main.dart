@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:odm/splash_screen.dart';
+import 'package:odm/store/invoice_order_store.dart';
 import 'package:odm/store/login_store.dart';
+import 'package:odm/store/purchase_store.dart';
 import 'package:odm/store/quotation_store.dart';
+import 'package:odm/store/work_order_store.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -17,6 +20,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<QuotationStore>(
           create: (_)=>QuotationStore(),
         ),
+
+        ChangeNotifierProvider<WorkOrderStore>(
+          create: (_)=>WorkOrderStore(),
+        ),
+
+        ChangeNotifierProvider<PurchaseStore>(
+          create: (_)=>PurchaseStore(),
+        ),
+        ChangeNotifierProvider<InvoiceStore>(
+          create: (_)=>InvoiceStore(),
+        )
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

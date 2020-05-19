@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart'as http;
 import 'package:odm/models/quotation_response.dart';
+import 'package:odm/models/work_order_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-class QuotationService{
-  static const String otpUrl = "http://api.odm.esecdev.com/quotation";
-  static Future<QuotationResponse> quotation()async{
+class WorkOrderService{
+  static const String otpUrl = "http://api.odm.esecdev.com/work/order";
+  static Future<WorkOrderResponse> workOrder()async{
     final prefs = await SharedPreferences.getInstance();
     final counter = prefs.getString('Access_Token') ?? 0;
-    print("Quotation Service is running...");
-    print("here is the AcessToken value");
+    print("WO Service is running ....");
     print(counter);
     final Map<String, String> headers = {
       "access-token": counter
@@ -17,7 +17,7 @@ class QuotationService{
 
     final result =await http.get(otpUrl,  headers:headers);
     if(result.statusCode == 200 && result.body!=null)
-      return QuotationResponse.fromJson(jsonDecode(result.body));
+      return WorkOrderResponse.fromJson(jsonDecode(result.body));
     return null;
   }
 }
