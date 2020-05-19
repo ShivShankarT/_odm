@@ -18,7 +18,6 @@ Future navigateToSubPage(context) async {
 }
 
 class _QuotationPageState extends State<QuotationPage> {
-  List<QuotationResponse> _listQuotationResponse= List<QuotationResponse>();
 
   @override
   void initState() {

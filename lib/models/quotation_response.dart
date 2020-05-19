@@ -41,7 +41,7 @@ class QuotationData {
   int quotationId;
   String partyCompanyDisplay;
   var quotationNo;
-  String quotationDate;
+  var quotationDate;
   String quotationExpiryDate;
   var quotationTotal;
   String quotationStatus;

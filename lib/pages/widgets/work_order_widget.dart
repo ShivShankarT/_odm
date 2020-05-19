@@ -24,16 +24,16 @@ class WorkOrderWidget extends StatelessWidget{
                       padding:
                       const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),
                       child: Text(
-                        ' ${data.quotationNo  ?? "Empty"}',
+                        ' ${data.partyCompany}',
                         style: TextStyle(
-                            fontSize: 22.0, fontWeight: FontWeight.bold),
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
                       padding:
                       const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
                       child: Text(
-                        ' ${data.quotationNo  ?? "Empty"}',
+                        ' ${data.orderNo}',
                         style: TextStyle(fontSize: 18.0),
                       ),
                     ),
@@ -41,7 +41,7 @@ class WorkOrderWidget extends StatelessWidget{
                       padding:
                       const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
                       child: Text(
-                        ' ${data.quotationNo  ?? "Empty"}',
+                        ' ${data.orderDate}',
                         style: TextStyle(fontSize: 18.0),
                       ),
                     ),
@@ -54,13 +54,13 @@ class WorkOrderWidget extends StatelessWidget{
                     children: <Widget>[
                       Text(
                        /* "INR ${data.quotationNo}",*/
-                        ' ${data.quotationNo  ?? "Empty"}',
+                        ' ${data.currencySymbol} ${data.orderTotal}',
                      style: TextStyle(color: Colors.grey),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                        ' ${data.quotationNo  ?? "Empty"}',
+                        ' ${data.statusName}',
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
