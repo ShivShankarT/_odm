@@ -253,10 +253,10 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
       if (error == false) {
         print("running changePassword screen .........");
         Navigator.of(context)
-            .push(MaterialPageRoute<Null>(
+            .pushAndRemoveUntil(MaterialPageRoute<Null>(
           builder: (BuildContext context) =>
           new Login(),
-        )
+        ),(_)=>false
         );
       }
 

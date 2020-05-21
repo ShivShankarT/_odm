@@ -12,11 +12,6 @@ class QuotationPage extends StatefulWidget with NavigationStates {
 }
 
 
-Future navigateToSubPage(context) async {
-  Navigator.push(
-      context, MaterialPageRoute(builder: (context) => QuotationDetails()));
-}
-
 class _QuotationPageState extends State<QuotationPage> {
 
   @override

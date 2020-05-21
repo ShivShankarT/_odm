@@ -3,6 +3,7 @@ import 'package:odm/splash_screen.dart';
 import 'package:odm/store/invoice_order_store.dart';
 import 'package:odm/store/login_store.dart';
 import 'package:odm/store/purchase_store.dart';
+import 'package:odm/store/quotation_details_store.dart';
 import 'package:odm/store/quotation_store.dart';
 import 'package:odm/store/work_order_store.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<QuotationStore>(
           create: (_)=>QuotationStore(),
+        ),
+        ChangeNotifierProvider<QDetailsStore>(
+          create: (_)=>QDetailsStore(),
         ),
 
         ChangeNotifierProvider<WorkOrderStore>(
