@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:odm/loader.dart';
 import 'package:odm/otp_varification.dart';
-import 'package:odm/services/login_service.dart';
 import 'package:odm/store/login_store.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'models/login_response.dart';
 
 class LoginScreen extends StatelessWidget {
   // This widget is the root of your application.
@@ -114,14 +111,14 @@ class _MyHomePageState extends State<Login> {
                               decoration: InputDecoration(
                                   contentPadding:
                                   EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                                  hintText: "Password",
+                                  labelText: 'Password',
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(32.0))),
                             ),
                             SizedBox(
                               height: 35.0,
                             ),
-                        store.isLoggingIn ?Center(
+                         store.isLoggingIn ?Center(
                           child: CircularProgressIndicator(),)
                             :Material(
                                 elevation: 5.0,

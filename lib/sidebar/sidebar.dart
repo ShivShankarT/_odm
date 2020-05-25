@@ -178,8 +178,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           Alert(
                             context: context,
                             type: AlertType.warning,
-                            title: "Do You Want To Logout !",
-                            desc: "Flutter is more awesome with RFlutter Alert.",
+                            title: "Logout?",
+                            desc: "Do you really want to logout",
                             buttons: [
                               DialogButton(
                                 child: Text(
@@ -246,8 +246,6 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
 
   _logout() async {
     final x = await LogoutService.logout();
-    print("here is the x valu");
-    print(x.toJson());
     if (x != null) {
       final error = x.error;
       if (error == false) {

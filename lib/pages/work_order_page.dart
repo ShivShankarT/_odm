@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:odm/models/quotation_response.dart';
-import 'package:odm/models/work_order_details.dart';
 import 'package:odm/models/work_order_response.dart';
 import 'package:odm/navigation_bloc.dart';
 import 'package:odm/pages/widgets/quotation_widget.dart';
+import 'package:odm/pages/widgets/work_order_details_wedget.dart';
 import 'package:odm/pages/widgets/work_order_widget.dart';
 
 import 'package:odm/store/work_order_store.dart';
@@ -17,11 +17,10 @@ class WorkOrderPage extends StatefulWidget with NavigationStates {
 
 Future navigateToSubPage(context) async {
   Navigator.push(
-      context, MaterialPageRoute(builder: (context) => WorkOrderDetails()));
+      context, MaterialPageRoute(builder: (context) => WorkOrderDetailsScreen()));
 }
 
 class _WorkOrderPageState extends State<WorkOrderPage> {
-  List<WorkOrderResponse> _listWorkOrderResponse= List<WorkOrderResponse>();
 
   @override
   void initState() {
@@ -42,7 +41,7 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
           Center(child: CircularProgressIndicator(),)
               :ListView.builder(
             itemCount: store.workOrderResponse.data.length,
-            itemBuilder: (context, index) => WorkOrderWidget(data: store.workOrderResponse.data[index],),
+            itemBuilder: (context, index) => WorkOrderWidget(workOrderData: store.workOrderResponse.data[index],),
           );
         }
     );

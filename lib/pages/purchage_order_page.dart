@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:odm/models/purchase_details.dart';
 import 'package:odm/models/purchase_response.dart';
+import 'package:odm/pages/purchase_details.dart';
 import 'package:odm/pages/widgets/purchase_widget.dart';
 import 'package:odm/store/purchase_store.dart';
 import 'package:provider/provider.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:odm/models/quotation_response.dart';
 import 'package:odm/models/work_order_response.dart';
+import 'package:odm/pages/widgets/work_order_details_wedget.dart';
 
 class WorkOrderWidget extends StatelessWidget{
-  final WorkOrderData data;
-  const WorkOrderWidget({Key key, this.data}) : super(key: key);
+  final WorkOrderData workOrderData;
+  const WorkOrderWidget({Key key, this.workOrderData}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -12,6 +12,14 @@ class WorkOrderWidget extends StatelessWidget{
       borderOnForeground: true,
       margin: const EdgeInsets.all(8.0),
       child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    WorkOrderDetailsScreen(id: workOrderData.quotationId,),
+              ));
+        },
         child: Column(
           children: <Widget>[
             Row(
@@ -24,7 +32,7 @@ class WorkOrderWidget extends StatelessWidget{
                       padding:
                       const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),
                       child: Text(
-                        ' ${data.partyCompany}',
+                        ' ${workOrderData.partyCompany}',
                         style: TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.bold),
                       ),
@@ -33,7 +41,7 @@ class WorkOrderWidget extends StatelessWidget{
                       padding:
                       const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
                       child: Text(
-                        ' ${data.orderNo}',
+                        ' ${workOrderData.orderNo}',
                         style: TextStyle(fontSize: 18.0),
                       ),
                     ),
@@ -41,7 +49,7 @@ class WorkOrderWidget extends StatelessWidget{
                       padding:
                       const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
                       child: Text(
-                        ' ${data.orderDate}',
+                        ' ${workOrderData.orderDate}',
                         style: TextStyle(fontSize: 18.0),
                       ),
                     ),
@@ -54,13 +62,13 @@ class WorkOrderWidget extends StatelessWidget{
                     children: <Widget>[
                       Text(
                        /* "INR ${data.quotationNo}",*/
-                        ' ${data.currencySymbol} ${data.orderTotal}',
+                        ' ${workOrderData.currencySymbol} ${workOrderData.orderTotal}',
                      style: TextStyle(color: Colors.grey),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                        ' ${data.statusName}',
+                        ' ${workOrderData.statusName}',
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),

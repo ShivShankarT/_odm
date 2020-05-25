@@ -37,7 +37,6 @@ class _OtpVerificationState extends State<OtpVerification> {
       controller: myOtpController,
       onSubmitted: (Text){
         otp=Text;
-        print(otp);
       },
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:odm/models/quotation_Details_response.dart';
+import 'package:odm/models/quotation_details_response.dart';
 import 'package:odm/services/quotation_details_service.dart';
 
 class QDetailsStore extends ChangeNotifier{
@@ -14,6 +14,7 @@ class QDetailsStore extends ChangeNotifier{
       loadingId = id;
       final quotationDetailsData = await QDetailsService.quotationDetails(id);
       if (quotationDetailsData == null) {
+
         error = "Some Error";
         loadingId = null;
         setLoading(false);

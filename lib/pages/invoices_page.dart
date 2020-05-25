@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:odm/pages/invoice_details.dart';
 import 'package:odm/pages/widgets/invoice_widget.dart';
 import 'package:odm/store/invoice_order_store.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,7 @@ class InvoiceScreen extends StatefulWidget with NavigationStates {
 
 Future navigateToSubPage(context) async {
   Navigator.push(
-      context, MaterialPageRoute(builder: (context) => InvoiceDetails()));
+      context, MaterialPageRoute(builder: (context) => InvoiceScreen()));
 }
 class _InvoiceScreenState extends State<InvoiceScreen> {
   @override
