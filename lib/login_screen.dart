@@ -5,6 +5,7 @@ import 'package:odm/loader.dart';
 import 'package:odm/otp_varification.dart';
 import 'package:odm/store/login_store.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginScreen extends StatelessWidget {
@@ -152,10 +153,15 @@ class _MyHomePageState extends State<Login> {
         }
     );
   }
-  void login(LoginStore loginStore){
+  void login(LoginStore loginStore) async{
+
+    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
     if(formKey.currentState.validate()) {
       String user = myEmailController.text.trim();
       String password = myPasswordController.text.trim();
+      sharedPreferences.setString("PASSWORD", password);
+      print(sharedPreferences.getString("PASSWORD"));
+
       loginStore.login(user, password, "1");
     }
   }

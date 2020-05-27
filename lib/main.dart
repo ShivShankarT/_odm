@@ -4,6 +4,7 @@ import 'package:odm/pages/change_password.dart';
 import 'package:odm/shared_pref_demo.dart';
 import 'package:odm/splash_screen.dart';
 import 'package:odm/store/WorkOrderDetailsStore.dart';
+import 'package:odm/store/change_password_store.dart';
 import 'package:odm/store/invoice_details_store.dart';
 import 'package:odm/store/invoice_order_store.dart';
 import 'package:odm/store/login_store.dart';
@@ -34,7 +35,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<WorkOrderStore>(
           create: (_)=>WorkOrderStore(),
         ),
-
+        ChangeNotifierProvider<ChangePasswordStore>(
+          create: (_)=>ChangePasswordStore(),
+        ),
         ChangeNotifierProvider<WorkOrderDetailsStore>(
           create: (_)=>WorkOrderDetailsStore(),
         ),

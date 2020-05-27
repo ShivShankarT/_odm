@@ -41,15 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return new Timer(duration, route);
   }
 
-  route() async{
-    SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
-    String token = sharedPreferences.getString("Access_Token");
 
-    Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => token == null ?Login():SideBarLayout()
-    )
-    );
-  }
   initScreen(BuildContext context) {
     return Scaffold(
     backgroundColor: Colors.white,
@@ -58,10 +50,20 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             aboveSection,
             Loader()
+           // CircularProgressIndicator()
           ],
         ),
       ),
         );
+  }
+  route() async{
+    SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
+    String token = sharedPreferences.getString("Access_Token");
+
+    Navigator.pushReplacement(context, MaterialPageRoute(
+        builder: (context) => token == null ?Login():SideBarLayout()
+    )
+    );
   }
 }
 
