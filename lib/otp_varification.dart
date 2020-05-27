@@ -67,7 +67,6 @@ class _OtpVerificationState extends State<OtpVerification> {
 
               if (data != null && data.length > 0)  {
                 Data required = data[0];
-
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setString('FNAME',data[0].fname );
                 prefs.setString('LNAME', data[0].lname);

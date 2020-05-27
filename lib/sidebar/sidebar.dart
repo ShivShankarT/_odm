@@ -15,55 +15,48 @@ import '../navigation_bloc.dart';
 
 class SideBar extends StatefulWidget  {
   var myName=TextEditingController();
+
+
+
+
   @override
   _SideBarState createState() => _SideBarState();
 }
 
 class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<SideBar>  {
 
-  var name;
-  final profile=new Container (
-    child: ListTile(
-      title: Text ('name'),
-      subtitle: Text(
-        "shiv.shankar@esecforte.com",
-        style: TextStyle(
-          color: Color(0xFF1BB5FD),
-          fontSize: 15,
-        ),
-      ),
-      leading: CircleAvatar(
-        child: Icon(
-          Icons.perm_identity,
-          color: Colors.white,
-        ),
-        radius: 40,
-      ),
-    ),
-  );
+  String fName;
+  String lName;
+  String email;
+
+
+
   AnimationController _animationController;
   StreamController<bool> isSidebarOpenedStreamController;
   Stream<bool> isSidebarOpenedStream;
   StreamSink<bool> isSidebarOpenedSink;
   final _animationDuration = const Duration(milliseconds: 500);
 
-  @override
-  void setState(fn)  async{
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-    name = prefs.getString('FNAME');
-    print(name);
-    super.setState(fn);
-  }
+
   @override
   void initState() {
     super.initState();
+    _findNameAndEmail();
     _animationController = AnimationController(vsync: this, duration: _animationDuration);
      isSidebarOpenedStreamController = PublishSubject<bool>();
     isSidebarOpenedStream = isSidebarOpenedStreamController.stream;
     isSidebarOpenedSink = isSidebarOpenedStreamController.sink;
   }
+
+
+  _findNameAndEmail() async{
+    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+    fName= sharedPreferences.getString("FNAME")?? '';
+    lName= sharedPreferences.getString("LNAME")?? '';
+    email= sharedPreferences.getString("EMAIL") ?? '';
+  }
+
 
   @override
   void dispose() {
@@ -87,7 +80,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return StreamBuilder<bool>  (
@@ -112,7 +105,27 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         height: 80,
                       ),
                       Container(
-                        child:  profile,
+                        child:   Container (
+                          child: ListTile(
+                            title: Text ('$fName' '' '$lName', style: TextStyle(
+                              color: Color(0xFF1BB5FD),
+                              fontSize: 15,
+                            ),),
+                            subtitle: Text( '$email',
+                              style: TextStyle(
+                                color: Color(0xFF1BB5FD),
+                                fontSize: 15,
+                              ),
+                            ),
+                            leading: CircleAvatar(
+                              child: Icon(
+                                Icons.perm_identity,
+                                color: Colors.white,
+                              ),
+                              radius: 40,
+                            ),
+                          ),
+                        ),
                       ),
                       Divider(
                         height: 60,
