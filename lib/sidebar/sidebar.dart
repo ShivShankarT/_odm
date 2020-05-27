@@ -107,7 +107,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                       Container(
                         child:   Container (
                           child: ListTile(
-                            title: Text ('$fName' '' '$lName', style: TextStyle(
+                            title: Text ('$fName' ' ' '$lName', style: TextStyle(
                               color: Color(0xFF1BB5FD),
                               fontSize: 15,
                             ),),
