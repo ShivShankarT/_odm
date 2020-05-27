@@ -66,7 +66,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                                         iconSize: 30,
                                         color: Colors.white,
                                         onPressed: () {
-                                          QDetailsService.downloadPdf(widget.id);
+                                         /* QDetailsService.downloadPdf(widget.id);*/
                                         }
 
                                     ),
