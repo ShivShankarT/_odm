@@ -34,15 +34,15 @@ class PurchaseWidget extends StatelessWidget{
                       child: Text(
                         '${purchaseData.partyCompany}',
                         style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                            fontSize: 15.0, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
                       padding:
-                      const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
+                      const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
                       child: Text(
                         '${purchaseData.porderNo}',
-                        style: TextStyle(fontSize: 18.0),
+                        style: TextStyle(fontSize: 15.0),
                       ),
                     ),
                     Padding(
@@ -50,7 +50,7 @@ class PurchaseWidget extends StatelessWidget{
                       const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
                       child: Text(
                         '${purchaseData.porderDate}',
-                        style: TextStyle(fontSize: 18.0),
+                        style: TextStyle(fontSize: 15.0),
                       ),
                     ),
                   ],
@@ -68,7 +68,7 @@ class PurchaseWidget extends StatelessWidget{
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           '${purchaseData.porderStatus}',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.blue),
                         ),
                       ),
                     ],

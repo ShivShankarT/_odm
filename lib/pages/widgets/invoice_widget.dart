@@ -31,15 +31,15 @@ class InvoiceWidget extends StatelessWidget{
                         child: Text(
                           '${data.partyCompany}',
                           style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Padding(
                         padding:
-                        const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
+                        const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
                         child: Text(
                           '${data.orderNo}',
-                          style: TextStyle(fontSize: 18.0),
+                          style: TextStyle(fontSize: 15.0),
                         ),
                       ),
                       Padding(
@@ -47,7 +47,7 @@ class InvoiceWidget extends StatelessWidget{
                         const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
                         child: Text(
                           '${data.invoiceDate}',
-                          style: TextStyle(fontSize: 18.0),
+                          style: TextStyle(fontSize: 15.0),
                         ),
                       ),
                     ],
@@ -66,7 +66,7 @@ class InvoiceWidget extends StatelessWidget{
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           '${data.statusName}',
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.blue),
                         ),
                       ),
                     ],
