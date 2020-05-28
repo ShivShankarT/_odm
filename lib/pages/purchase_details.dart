@@ -1,9 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
+import 'package:http/http.dart' as http;
 import 'package:odm/models/purchase_details_response.dart';
+import 'package:odm/models/quotation_details_response.dart';
 import 'package:odm/pages/quotation_page.dart';
 import 'package:odm/store/purchase_details_store.dart';
+import 'package:odm/store/quotation_details_store.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PurchaseDetails extends StatefulWidget {
   final int id;
@@ -16,297 +26,346 @@ class PurchaseDetails extends StatefulWidget {
 }
 
 class _PurchaseDetailsState extends State<PurchaseDetails> {
+  String pathPDF = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    createFileOfPdfUrl(widget.id).then((f) {
+      setState(() {
+        pathPDF = f.path;
+        print(pathPDF);
+      });
+    });
+  }
+
+  static const String otpUrl = "http://api.odm.esecdev.com/purchase/order/";
+
+  Future<File> createFileOfPdfUrl(id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final counter = prefs.getString('Access_Token') ?? 0;
+    print(counter);
+    final Map<String, String> headers = {"access-token": counter};
+
+    print("here is header:"); print(headers);
+    //   final result = await http.get("$otpUrl$id" + "pdf", headers: headers);
+    //  if (result.statusCode == 200 && result.body != null) {
+    print("Downloading...");
+    final url = '$otpUrl$id''/pdf';
+    // final url="http://api.odm.esecdev.com/quotation/153/pdf";
+    //  final url = "http://africau.edu/images/default/sample.pdf";
+
+    print(url);
+    final filename = url.substring(url.lastIndexOf("/") + 1);
+    var request = await HttpClient().getUrl(Uri.parse(url));
+    request.headers.set("access-token", counter);
+    // final result = await HttpClient().addCredentials(url, realm, credentials);
+    // final response = await http.get("$otpUrl$id" + "pdf", headers: headers);
+
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = new File('$dir/$filename');
+    await file.writeAsBytes(bytes);
+    print(file);
+    return file;
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<PurchaseDetailsStore>(
-        builder: (context, store, _) {
-          final PurchaseDetailsData data = store.cachedMap[widget.id];
-          if (data == null && store.loadingId != widget.id &&
-              store.loading == false)
-            store.loadPurchaseDetails(widget.id);
-          return Scaffold(
-            body: store.loading && store.loadingId == widget.id ? Center(
-              child: CircularProgressIndicator(),
-            ) : data != null ? SafeArea(
+    return Consumer<PurchaseDetailsStore>(builder: (context, store, _) {
+      final PurchaseDetailsData data = store.cachedMap[widget.id];
+      if (data == null &&
+          store.loadingId != widget.id &&
+          store.loading == false) store.loadPurchaseDetails(widget.id);
+      return Scaffold(
+        body: store.loading && store.loadingId == widget.id
+            ? Center(
+          child: CircularProgressIndicator(),
+        )
+            : data != null
+            ? SafeArea(
+          child: Container(
+            child: SingleChildScrollView(
               child: Container(
-                child: Container(
-                  child: Column(
-                    children: <Widget>[
-                      new Container(
-                        color: Colors.lightBlue,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                  1.0, 6.0, 2.0, 6.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: new Icon(
-                                      Icons.arrow_back,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                QuotationPage()),
-                                      );
-                                    },
-                                  ),
-
-                                  Text(" Purchase Details"),
-                                  Icon(
-                                    Icons.picture_as_pdf,
+                child: Column(
+                  children: <Widget>[
+                    new Container(
+                      color: Colors.green,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                1.0, 6.0, 2.0, 6.0),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: new Icon(
+                                    Icons.arrow_back,
                                     color: Colors.white,
                                     size: 30,
                                   ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsets.fromLTRB(12.0, 2.0, 12.0, 6.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text( '${data.partyCompanyDisplay}')
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsets.fromLTRB(12.0, 2.0, 12.0, 6.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[Text(data.ebBCity)],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text('${data.currencySymbol}${data.porderTotal
-                                     }')
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[Text('${data.porderDate}')],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                              const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 6.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[Text('${data.orderNo}')],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      new Card(
-                        elevation: 10,
-                        borderOnForeground: true,
-                        margin: const EdgeInsets.all(8.0),
-                        child: InkWell(
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                children: <Widget>[
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            12.0, 12.0, 12.0, 10.0),
-                                        child: Text(
-                                          "IGST(${data.porderTaxPer}%)",
-                                          style: TextStyle(fontSize: 18.0),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            12.0, 6.0, 12.0, 12.0),
-                                        child: Text(
-                                          "Sub Total",
-                                          style: TextStyle(fontSize: 18.0),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            12.0, 3.0, 12.0, 10.0),
-                                        child: Text(
-                                          "Discount",
-                                          style: TextStyle(fontSize: 18.0),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            22.0, 6.0, 12.0, 20.0),
-                                        child: Text(
-                                          "Total",
-                                          style: TextStyle(
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        Text(
-                                          '${data.currencySymbol}${data
-                                              .porderTaxAmt}',
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            '${data.currencySymbol}${data
-                                                .porderSubTotal}',
-                                            style: TextStyle(fontSize: 18),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            '${data.currencySymbol}${data
-                                                .porderDiscount}',
-                                            style: TextStyle(fontSize: 18),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20.0, 6.0, 12.0, 0.0),
-                                          child: Text(
-                                            '${data.currencySymbol}${data
-                                                .porderTotal}', style: TextStyle(
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "Item details ",
-                      ),
-                      new Card(
-                        elevation: 10,
-                        borderOnForeground: true,
-                        margin: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        12.0, 12.0, 12.0, 10.0),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          data.items[0].poiName,
-                                          style: TextStyle(
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        if(data.items.length > 1)
-                                          Text(
-                                            '${data.items[0].poiDescription}',
-                                            style: TextStyle(fontSize: 18.0),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              QuotationPage()),
+                                    );
+                                  },
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      12.0, 0.0, 12.0, 24.0),
-                                  child: Column(
-                                    children: <Widget>[
-                                      if(data.items.length > 1)
-                                        Text(
-                                         '${ data.items[1].poiName}',
-                                          style: TextStyle(
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      if(data.items.length > 1)
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              12.0, 30.0, 12.0, 24.0),
-                                          child: Text(
-                                           '${data.items[1].poiDescription}' ,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      if(data.items.length > 2)
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20.0, 20.0, 12.0, 24.0),
-                                          child: Text(
-                                            data.items[2].poiName,
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      if(data.items.length > 2)
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              20.0, 20.0, 12.0, 0.0),
-                                          child: Text(
-                                            '${data.items[2].poiDescription}',
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
+                                Text(
+                                  "Purchase Order Details",
+                                  style: TextStyle(fontSize: 20),
                                 ),
+                                IconButton(
+                                    icon: Icon(Icons.picture_as_pdf),
+                                    iconSize: 30,
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PDFScreen(pathPDF)),
+                                      );
+                                    }),
                               ],
                             ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                12.0, 2.0, 12.0, 6.0),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '${data.partyCompanyDisplay}',
+                                  style: TextStyle(fontSize: 17),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                12.0, 2.0, 12.0, 6.0),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '${data.pbCity}',
+                                  style: TextStyle(fontSize: 17),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                12.0, 6.0, 12.0, 6.0),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '${data.currencySymbol} '
+                                      ' ${data.porderTotal}',
+                                  style: TextStyle(fontSize: 17),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                12.0, 6.0, 12.0, 12.0),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  data.porderDate,
+                                  style: TextStyle(fontSize: 17),
+                                )
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                12.0, 6.0, 12.0, 6.0),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  '${data.porderNo}',
+                                  style: TextStyle(fontSize: 17),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.5),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(15))),
+                      child: Column(
+                        children: <Widget>[
+                          smallCommon(
+                              "SGST(${data.porderTaxPer}%)",
+                              "INR 1.05"),
+                          smallCommon("CGST(3%)", "INR 1.05"),
+                          smallCommon(
+                            "Sub Total",
+                            '${data.currencySymbol} '
+                                ' ${data.porderSubTotal}',
+                          ),
+                          smallCommon(
+                            "Discount",
+                            '${data.currencySymbol} '
+                                ' '
+                                '${data.porderDiscount}',
+                          ),
+                          common(
+                              "Total",
+                              '${data.currencySymbol} '
+                                  '${data.porderTotal}')
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "Item details ",
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(18),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.5),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(18))),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            if (data.items.length > 0)
+                              common(
+                                  data.items[0].poiName,
+                                  '${data.currencySymbol} '
+                                      ' '
+                                      ' ${data.items[0].poiTotal}'),
+                            if (data.items.length > 0)
+                              smallCommon(
+                                  ' ${data.items[0].poiDescription}',
+                                  ""),
+                            if (data.items.length > 1)
+                              common(
+                                  data.items[1].poiName,
+                                  '${data.currencySymbol} '
+                                      ' '
+                                      ' ${data.items[1].poiTotal}'),
+                            if (data.items.length > 1)
+                              smallCommon(
+                                  ' ${data.items[1].poiDescription}',
+                                  ""),
+                            if (data.items.length > 2)
+                              common(
+                                  data.items[2].poiName,
+                                  '${data.currencySymbol} '
+                                      ' '
+                                      ' ${data.items[2].poiTotal}'),
+                            if (data.items.length > 2)
+                              smallCommon(
+                                  ' ${data.items[2].poiDescription}',
+                                  ""),
+                            if (data.items.length > 3)
+                              common(
+                                  data.items[3].poiName,
+                                  '${data.currencySymbol} '
+                                      ' '
+                                      ' ${data.items[3].poiTotal}'),
+                            if (data.items.length > 3)
+                              smallCommon(
+                                  ' ${data.items[3].poiDescription}',
+                                  ""),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ) : Center(child: Text("Error"),),
-          );
-        }
+            ),
+          ),
+        )
+            : Center(
+          child: Text("Error"),
+        ),
+      );
+    });
+  }
+
+  common(String first, String second) {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(
+              child: Text(
+                first,
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              )),
+          Spacer(),
+          Expanded(
+              child: Text(
+                second,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              )),
+        ],
+      ),
     );
+  }
+
+  smallCommon(String first, String second) {
+    return Padding(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Expanded(child: Text(first)),
+          Spacer(),
+          Expanded(child: Text(second)),
+        ],
+      ),
+    );
+  }
+}
+
+class PDFScreen extends StatelessWidget {
+  String pathPDF = "";
+  PDFScreen(this.pathPDF);
+
+  @override
+  Widget build(BuildContext context) {
+    return PDFViewerScaffold(
+        appBar: AppBar(
+          title: Text("Document"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        path: pathPDF);
   }
 }
