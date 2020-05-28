@@ -43,16 +43,16 @@ class _QuotationWidgetState extends State<QuotationWidget> {
                         child: Text(
                           widget.data.partyCompany,
                           style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Padding(
                         padding:
-                        const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
+                        const EdgeInsets.fromLTRB(9.0, 6.0, 12.0, 6.0),
                         child: Text(
                           //data.partyCompanyDisplay ?? "", " ${data.quotaionNo}"
                           " ${widget.data.quotationNo}",
-                          style: TextStyle(fontSize: 18.0),
+                          style: TextStyle(fontSize: 15.0),
                         ),
                       ),
                       Padding(
@@ -61,7 +61,7 @@ class _QuotationWidgetState extends State<QuotationWidget> {
                         child: Text(
                           //  data.partyCompanyDisplay ?? "",
                           widget.data.quotationDate,
-                          style: TextStyle(fontSize: 18.0),
+                          style: TextStyle(fontSize: 15.0),
                         ),
                       ),
                     ],
@@ -81,7 +81,7 @@ class _QuotationWidgetState extends State<QuotationWidget> {
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
                           widget.data.quotationStatus,
-                          style: TextStyle(color: Colors.grey),
+                          style: TextStyle(color: Colors.blue),
                         ),
                       ),
                     ],
