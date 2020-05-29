@@ -17,7 +17,7 @@ class WorkOrderWidget extends StatelessWidget{
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    WorkOrderDetailsScreen(id: workOrderData.quotationId,),
+                    WorkOrderDetailsScreen(id: workOrderData.orderId,),
               ));
         },
         child: Column(

@@ -395,7 +395,7 @@ class Items {
   String oiType;
   String oiName;
   var oiCode;
-  String oiDescription;
+  var oiDescription;
   var oiRate;
   var oiQuantity;
   var taxGroupId;

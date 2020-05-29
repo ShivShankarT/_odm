@@ -219,8 +219,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                               )
                             ],
                           ).show();
-                          onIconPressed(
-                          );
+                          onIconPressed () => Navigator.pop(context);
+
                         /*  BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);*/
                         },
                       ),
@@ -259,29 +259,32 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
   }
 
   _logout() async {
+
     final x = await LogoutService.logout();
+    if(x.message=="Invalid token."){
+      Navigator.pop(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+
+      );
+
+    }
     if (x != null) {
       final error = x.error;
       if (error == false) {
         print("running changePassword screen .........");
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => SplashScreen()),
+          MaterialPageRoute(builder: (context) => Login()),
               (Route<dynamic> route) => false,
         );
-      }
-      else if(x.message=="Invalid token."){
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => SplashScreen()),
-              (Route<dynamic> route) => false,
-        );
-
       }
 
     }
+
+    }
   }
-}
+
 
 class CustomMenuClipper extends CustomClipper<Path> {
   @override

@@ -19,11 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
        child: Image.asset("assets/img/logo_big_splash.png",width: 200,height: 200,),
     )
   );
-  final belowSection = new Container(
-    margin: EdgeInsets.only(top: 10),
-    child:CircularProgressIndicator()
 
-  );
 
   @override
   Widget build(BuildContext context){
@@ -37,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   startTimer() async {
-    var duration = Duration(seconds: 5);
+    var duration = Duration(seconds: 3);
     return new Timer(duration, route);
   }
 
@@ -50,7 +46,6 @@ class _SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             aboveSection,
            Loader(),
-           // CircularProgressIndicator()
           ],
         ),
       ),

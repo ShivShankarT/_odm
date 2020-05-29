@@ -63,7 +63,6 @@ class _MyHomePageState extends State<Login> {
               body: SingleChildScrollView(
                 child: Center(
                   child: Container(
-                    color: Colors.white,
                     child: Padding(
                       padding: const EdgeInsets.all(36.0),
                       child: Form(
@@ -74,9 +73,9 @@ class _MyHomePageState extends State<Login> {
                           children: <Widget>[
                             Container(
                               margin: EdgeInsets.only(top: 100),
-                              child: Image.asset("assets/img/logo_big.png"),
+                              child: Image.asset("assets/img/logo_big.png",height: 100,),
                             ),
-                            SizedBox(height: 25.0),
+                            SizedBox(height: 55.0),
                             TextFormField(
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) =>

@@ -29,12 +29,12 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<WorkOrderDetailsStore>(builder: (context, store, _) {
-      final WODetailsData data = store.cachedMap[widget.id];
-      if (data == null && store.loadingId != widget.id && store.loading == false) store.loadWorkOrderDetails(widget.id);
+      final WODetailsData woDetailsData = store.cachedMap[widget.id];
+      if (woDetailsData == null && store.loadingId != widget.id && store.loading == false) store.loadWorkOrderDetails(widget.id);
       return Scaffold(
         body: store.loading && store.loadingId == widget.id ? Center(
           child: CircularProgressIndicator(),
-        ) : data != null
+        ) : woDetailsData != null
             ? SafeArea(
           child: Container(
             child: SingleChildScrollView(
@@ -72,11 +72,10 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                                   "Work Order Details",
                                   style: TextStyle(fontSize: 20),
                                 ),
-                                IconButton(
-                                    icon: Icon(Icons.picture_as_pdf),
-                                    iconSize: 30,
-                                    color: Colors.white,
-                                    ),
+                                SizedBox(
+                                  width: 5.0,
+                                  height: 1,
+                                ),
                               ],
                             ),
                           ),
@@ -88,7 +87,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${data.partyCompanyDisplay}' ?? "",
+                                  '${woDetailsData.partyCompanyDisplay}' ?? "",
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -102,7 +101,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${data.pbSCity}' ?? "",
+                                  '${woDetailsData.pbSCity}' ?? "",
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -116,7 +115,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${data.currencySymbol} '' ${data.orderTotal}',
+                                  '${woDetailsData.currencySymbol} '' ${woDetailsData.orderTotal}',
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -130,7 +129,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                '${data.orderDate}' ?? " ",
+                                '${woDetailsData.orderDate}' ?? " ",
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -144,7 +143,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${data.orderNo}' ?? " ",
+                                  '${woDetailsData.orderNo}' ?? " ",
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -162,21 +161,21 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                       child: Column(
                         children: <Widget>[
                           smallCommon(
-                              "SGST (${data.orderTaxPer}%)", "INR 1.05"),
+                              "SGST (${woDetailsData.orderTaxPer}%)", "INR 1.05"),
                           smallCommon("CGST(3%)", "INR 1.05"),
                           smallCommon(
-                            "Sub Total", '${data.currencySymbol}'?? " " ' ${data.orderSubTotal}' ?? " ",
+                            "Sub Total", '${woDetailsData.currencySymbol}'?? " " ' ${woDetailsData.orderSubTotal}' ?? " ",
                           ),
                           smallCommon(
                             "Discount",
-                            '${data.currencySymbol}' ?? ""
+                            '${woDetailsData.currencySymbol}' ?? ""
                                 ' '
-                                '${data.orderDiscount}' ?? "",
+                                '${woDetailsData.orderDiscount}' ?? "",
                           ),
                           common(
                               "Total",
-                              '${data.currencySymbol} ' ?? ""
-                                  '${data.orderTotal}')?? ""
+                              '${woDetailsData.currencySymbol} ' ?? ""
+                                  '${woDetailsData.orderTotal}')?? ""
                         ],
                       ),
                     ),
@@ -194,65 +193,55 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
-                            if (data.items.length > 0)
+                            if (woDetailsData.items.length > 0)
                               common(
-                                  data.items[0].oiName,
-                                  '${data.currencySymbol} '
+                                  woDetailsData.items[0].oiName,
+                                  '${woDetailsData.currencySymbol} '
                                       ' '
-                                      ' ${data.items[0].oiTotal}'),
-                            if (data.items.length > 0)
+                                      ' ${woDetailsData.items[0].oiTotal}'),
+                            if (woDetailsData.items.length > 0)
                               smallCommon(
-                                  ' ${data.items[0].oiDescription}',
+                                  ' ${woDetailsData.items[0].oiDescription}',
                                   ""),
-                            if (data.items.length > 1)
+                            if (woDetailsData.items.length > 1)
                               common(
-                                  data.items[1].oiName,
-                                  '${data.currencySymbol} '
+                                  woDetailsData.items[1].oiName,
+                                  '${woDetailsData.currencySymbol} '
                                       ' '
-                                      ' ${data.items[1].oiTotal}'),
-                            if (data.items.length > 1)
+                                      ' ${woDetailsData.items[1].oiTotal}'),
+                            if (woDetailsData.items.length > 1)
                               smallCommon(
-                                  ' ${data.items[1].oiDescription}',
+                                  ' ${woDetailsData.items[1].oiDescription}',
                                   ""),
-                            if (data.items.length > 2)
+                            if (woDetailsData.items.length > 2)
                               common(
-                                  data.items[2].oiName,
-                                  '${data.currencySymbol} '
+                                  woDetailsData.items[2].oiName,
+                                  '${woDetailsData.currencySymbol} '
                                       ' '
-                                      ' ${data.items[2].oiTotal}'),
-                            if (data.items.length > 2)
+                                      ' ${woDetailsData.items[2].oiTotal}'),
+                            if (woDetailsData.items.length > 2)
                               smallCommon(
-                                  ' ${data.items[2].oiDescription}',
+                                  ' ${woDetailsData.items[2].oiDescription}',
                                   ""),
-                            if (data.items.length > 3)
+                            if (woDetailsData.items.length > 3)
                               common(
-                                  data.items[3].oiName,
-                                  '${data.currencySymbol} '
+                                  woDetailsData.items[3].oiName,
+                                  '${woDetailsData.currencySymbol} '
                                       ' '
-                                      ' ${data.items[3].oiTotal}'),
-                            if (data.items.length > 3)
+                                      ' ${woDetailsData.items[3].oiTotal}'),
+                            if (woDetailsData.items.length > 3)
                               smallCommon(
-                                  ' ${data.items[3].oiDescription}',
+                                  ' ${woDetailsData.items[3].oiDescription}',
                                   ""),
-                            if (data.items.length > 4)
+                            if (woDetailsData.items.length > 4)
                               common(
-                                  data.items[4].oiName,
-                                  '${data.currencySymbol} '
+                                  woDetailsData.items[4].oiName,
+                                  '${woDetailsData.currencySymbol} '
                                       ' '
-                                      ' ${data.items[4].oiTotal}'),
-                            if (data.items.length > 4)
+                                      ' ${woDetailsData.items[4].oiTotal}'),
+                            if (woDetailsData.items.length > 4)
                               smallCommon(
-                                  ' ${data.items[4].oiDescription}',
-                                  ""),
-                            if (data.items.length > 5)
-                              common(
-                                  data.items[5].oiName,
-                                  '${data.currencySymbol} '
-                                      ' '
-                                      ' ${data.items[5].oiTotal}'),
-                            if (data.items.length > 5)
-                              smallCommon(
-                                  ' ${data.items[5].oiDescription}',
+                                  ' ${woDetailsData.items[4].oiDescription}',
                                   ""),
                           ],
                         ),
