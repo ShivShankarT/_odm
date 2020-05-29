@@ -193,7 +193,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                             context: context,
                             type: AlertType.warning,
                             title: "Logout?",
-                            desc: "Do you really want to logout",
+                            desc: "Do you really wanna logout",
                             buttons: [
                               DialogButton(
                                 child: Text(
@@ -206,8 +206,22 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                                   Color.fromRGBO(52, 138, 199, 1.0)
                                 ]),
                               ),
+                              DialogButton(
+                                child: Text(
+                                  "YES",
+                                  style: TextStyle(color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => _logout(),
+                                gradient: LinearGradient(colors: [
+                                  Color.fromRGBO(116, 116, 191, 1.0),
+                                  Color.fromRGBO(52, 138, 199, 1.0)
+                                ]),
+                              )
                             ],
+                          ).show();
+                          onIconPressed(
                           );
+                          /*  BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);*/
                         },
                       ),
                     ],
