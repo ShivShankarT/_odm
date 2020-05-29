@@ -101,9 +101,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                     width: 3 * width / 4,
                     child: TextFormField(
                         controller: _currentPasswordController,
-
                         onFieldSubmitted: (_) =>
-                            FocusScope.of(context).nextFocus(),
+                            FocusScope.of(context)
+                                .nextFocus(),
                         validator: (data) {
                           if (data.trim().isEmpty) return "Invalid Input";
                           return null;
@@ -207,8 +207,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 else {
 
                                   changePassword(currentPassword: _currentPasswordController.text,newPassword: _passwordController.text,mobile: "1");
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => SideBarLayout()),
+                                        (Route<dynamic> route) => false,
+                                  );
                                   SnackBar snackBar= new SnackBar(content: Text("Password Updated:"),);
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SideBar()));
+                                 // Navigator.push(context, MaterialPageRoute(builder: (context)=>SideBar()));
                                   _scaffoldKey.currentState.showSnackBar(snackBar);
                                  // Navigator.pop(context,MaterialPageRoute(builder: (context)=> SideBar()));
                                 }

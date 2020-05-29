@@ -28,6 +28,9 @@ class LoginStore extends ChangeNotifier{
     isLoggingIn = loggingIn;
     notifyListeners();
   }
+  reset(){
+    isLoggingIn = false;
+  }
 
 }
 enum LoginStatus{

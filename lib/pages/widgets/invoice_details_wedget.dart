@@ -40,7 +40,7 @@ class _InvoiceDetailsWidgetState extends State<InvoiceDetailsWidget> {
     });
   }
 
-  static const String otpUrl = "http://api.odm.esecdev.com/quotation/";
+  static const String otpUrl = "http://api.odm.esecdev.com/invoice/";
 
   Future<File> createFileOfPdfUrl(id) async {
     final prefs = await SharedPreferences.getInstance();

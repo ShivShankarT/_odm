@@ -43,24 +43,11 @@ class _QDetailsScreenState extends State<QDetailsScreen> {
   Future<File> createFileOfPdfUrl(id) async {
     final prefs = await SharedPreferences.getInstance();
     final counter = prefs.getString('Access_Token') ?? 0;
-    print(counter);
-    final Map<String, String> headers = {"access-token": counter};
-
-       print("here is header:"); print(headers);
- //   final result = await http.get("$otpUrl$id" + "pdf", headers: headers);
-  //  if (result.statusCode == 200 && result.body != null) {
       print("Downloading...");
-     final url = '$otpUrl$id''/pdf';
-    // final url="http://api.odm.esecdev.com/quotation/153/pdf";
-     //  final url = "http://africau.edu/images/default/sample.pdf";
-
-      print(url);
+      final url = '$otpUrl$id''/pdf';
       final filename = url.substring(url.lastIndexOf("/") + 1);
       var request = await HttpClient().getUrl(Uri.parse(url));
           request.headers.set("access-token", counter);
-     // final result = await HttpClient().addCredentials(url, realm, credentials);
-    // final response = await http.get("$otpUrl$id" + "pdf", headers: headers);
-
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       String dir = (await getApplicationDocumentsDirectory()).path;
@@ -126,6 +113,7 @@ class _QDetailsScreenState extends State<QDetailsScreen> {
                                               iconSize: 30,
                                               color: Colors.white,
                                               onPressed: () {
+
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(

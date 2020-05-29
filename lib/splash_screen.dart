@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           children: <Widget>[
             aboveSection,
-            Loader()
+           Loader(),
            // CircularProgressIndicator()
           ],
         ),

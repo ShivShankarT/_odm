@@ -92,9 +92,9 @@ class _MyHomePageState extends State<Login> {
                               decoration: InputDecoration(
                                   contentPadding:
                                   EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                                  hintText: "Email",
+                                  labelText: 'User Id',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(32.0))),
+                                      borderRadius: BorderRadius.circular(22.0))),
                             ),
                             SizedBox(height: 25.0),
                             TextFormField(
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<Login> {
                                   EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                                   labelText: 'Password',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(32.0))),
+                                      borderRadius: BorderRadius.circular(22.0))),
                             ),
                             SizedBox(
                               height: 35.0,

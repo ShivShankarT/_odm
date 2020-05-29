@@ -6,6 +6,7 @@ import 'package:odm/login_screen.dart';
 import 'package:odm/models/otp_response.dart';
 import 'package:odm/services/logout_service.dart';
 import 'package:odm/sidebar/sidebar_layout.dart';
+import 'package:odm/splash_screen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -263,9 +264,10 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
       final error = x.error;
       if (error == false) {
         print("running changePassword screen .........");
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => Login()),
+          MaterialPageRoute(builder: (context) => SplashScreen()),
+              (Route<dynamic> route) => false,
         );
       }
 

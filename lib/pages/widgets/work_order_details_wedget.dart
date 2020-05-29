@@ -26,53 +26,6 @@ class WorkOrderDetailsScreen extends StatefulWidget {
 }
 
 class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
-  String pathPDF = "";
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    createFileOfPdfUrl(widget.id).then((f) {
-      setState(() {
-        pathPDF = f.path;
-        print(pathPDF);
-      });
-    });
-  }
-
-  static const String otpUrl = "http://api.odm.esecdev.com/quotation/";
-
-  Future<File> createFileOfPdfUrl(id) async {
-    final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
-    print(counter);
-    final Map<String, String> headers = {"access-token": counter};
-
-    print("here is header:"); print(headers);
-    //   final result = await http.get("$otpUrl$id" + "pdf", headers: headers);
-    //  if (result.statusCode == 200 && result.body != null) {
-    print("Downloading...");
-    final url = '$otpUrl$id''/pdf';
-    // final url="http://api.odm.esecdev.com/quotation/153/pdf";
-    //  final url = "http://africau.edu/images/default/sample.pdf";
-
-    print(url);
-    final filename = url.substring(url.lastIndexOf("/") + 1);
-    var request = await HttpClient().getUrl(Uri.parse(url));
-    request.headers.set("access-token", counter);
-    // final result = await HttpClient().addCredentials(url, realm, credentials);
-    // final response = await http.get("$otpUrl$id" + "pdf", headers: headers);
-
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    print(file);
-    return file;
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Consumer<WorkOrderDetailsStore>(builder: (context, store, _) {
@@ -123,14 +76,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                                     icon: Icon(Icons.picture_as_pdf),
                                     iconSize: 30,
                                     color: Colors.white,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                PDFScreen(pathPDF)),
-                                      );
-                                    }),
+                                    ),
                               ],
                             ),
                           ),
@@ -142,7 +88,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${data.partyCompanyDisplay}',
+                                  '${data.partyCompanyDisplay}' ?? "",
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -156,7 +102,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${data.pbSCity}',
+                                  '${data.pbSCity}' ?? "",
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -170,8 +116,7 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                               MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  '${data.currencySymbol} '
-                                      ' ${data.orderTotal}',
+                                  '${data.currencySymbol} '' ${data.orderTotal}',
                                   style: TextStyle(fontSize: 17),
                                 )
                               ],
@@ -217,22 +162,21 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
                       child: Column(
                         children: <Widget>[
                           smallCommon(
-                              "SGST (${data.orderTaxPer}%)",
-                              "INR 1.05"),
+                              "SGST (${data.orderTaxPer}%)", "INR 1.05"),
                           smallCommon("CGST(3%)", "INR 1.05"),
                           smallCommon(
-                            "Sub Total", '${data.currencySymbol} '' ${data.orderSubTotal}',
+                            "Sub Total", '${data.currencySymbol}'?? " " ' ${data.orderSubTotal}' ?? " ",
                           ),
                           smallCommon(
                             "Discount",
-                            '${data.currencySymbol} '
+                            '${data.currencySymbol}' ?? ""
                                 ' '
-                                '${data.orderDiscount}',
+                                '${data.orderDiscount}' ?? "",
                           ),
                           common(
                               "Total",
-                              '${data.currencySymbol} '
-                                  '${data.orderTotal}')
+                              '${data.currencySymbol} ' ?? ""
+                                  '${data.orderTotal}')?? ""
                         ],
                       ),
                     ),
@@ -364,22 +308,3 @@ class _WorkOrderDetailsScreenState extends State<WorkOrderDetailsScreen> {
   }
 }
 
-class PDFScreen extends StatelessWidget {
-  String pathPDF = "";
-  PDFScreen(this.pathPDF);
-
-  @override
-  Widget build(BuildContext context) {
-    return PDFViewerScaffold(
-        appBar: AppBar(
-          title: Text("Document"),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {},
-            ),
-          ],
-        ),
-        path: pathPDF);
-  }
-}
