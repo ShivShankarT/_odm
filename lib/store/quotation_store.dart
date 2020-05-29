@@ -52,6 +52,8 @@ import 'package:odm/services/quotation_service.dart';
     notifyListeners();
   }
   reset(){
+    bool loading = false;
+    bool loadingSearch = false;
 
   }
 }

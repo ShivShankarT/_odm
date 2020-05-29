@@ -270,6 +270,14 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
               (Route<dynamic> route) => false,
         );
       }
+      else if(x.message=="Invalid token."){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => SplashScreen()),
+              (Route<dynamic> route) => false,
+        );
+
+      }
 
     }
   }

@@ -20,6 +20,7 @@ class LoginStore extends ChangeNotifier{
       print(loginData.toJson());
       SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
       await sharedPreferences.setString("Access_Token", loginData.accessToken);
+      await sharedPreferences.setString("otp", loginData.otp);
       setLoggingIn(false);
     }
   }

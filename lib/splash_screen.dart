@@ -65,5 +65,11 @@ class _SplashScreenState extends State<SplashScreen> {
     )
     );
   }
+  Future<bool> isLoggedIn() async
+  {
+
+    return false;
+  }
+
 }
 

@@ -94,7 +94,7 @@ class _MyHomePageState extends State<Login> {
                                   EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                                   labelText: 'User Id',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(22.0))),
+                                      borderRadius: BorderRadius.circular(12.0))),
                             ),
                             SizedBox(height: 25.0),
                             TextFormField(
@@ -114,7 +114,7 @@ class _MyHomePageState extends State<Login> {
                                   EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                                   labelText: 'Password',
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(22.0))),
+                                      borderRadius: BorderRadius.circular(12.0))),
                             ),
                             SizedBox(
                               height: 35.0,
@@ -123,7 +123,7 @@ class _MyHomePageState extends State<Login> {
                           child: CircularProgressIndicator(),)
                             :Material(
                                 elevation: 5.0,
-                                borderRadius: BorderRadius.circular(30.0),
+                                borderRadius: BorderRadius.circular(10.0),
                                 color: Colors.blue,
                                 child:  MaterialButton(
                                     child: Text(
@@ -161,7 +161,6 @@ class _MyHomePageState extends State<Login> {
       String password = myPasswordController.text.trim();
       sharedPreferences.setString("PASSWORD", password);
       print(sharedPreferences.getString("PASSWORD"));
-
       loginStore.login(user, password, "1");
     }
   }

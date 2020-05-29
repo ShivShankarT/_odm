@@ -4,6 +4,7 @@ import 'package:odm/login_screen.dart';
 import 'package:odm/navigation_bloc.dart';
 import 'package:odm/search_delegate/flutter_search_delegate.dart';
 import 'package:odm/pages/widgets/quotation_widget.dart';
+import 'package:odm/splash_screen.dart';
 import 'package:odm/store/quotation_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +41,7 @@ class _QuotationPageState extends State<QuotationPage> {
             store.loadQuotations();
           });
         }
-        if (store.error?.toLowerCase() == "invalid token.") {
+        if (store.error?.toLowerCase() == "invalid token." || store.error == "Not logged in."  ) {
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
             await logout(context);
             Navigator.of(context).pushAndRemoveUntil(
@@ -77,8 +78,8 @@ class _QuotationPageState extends State<QuotationPage> {
 logout(BuildContext context) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   var accessToken = sharedPreferences.getString("Access_Token");
-  accessToken = null;
+  accessToken = "1";
   QuotationStore quotationStore =
       Provider.of<QuotationStore>(context, listen: false);
-  quotationStore.reset();
+    quotationStore.reset();
 }
