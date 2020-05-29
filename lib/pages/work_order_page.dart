@@ -34,6 +34,7 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Center(child: Text("Work Orders")),
         actions: [
           InkWell(
             onTap: () {
@@ -46,7 +47,9 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
                 workOrderStore.loadWorkOrder();
               });
             },
-            child: Icon(Icons.search),
+            child: IconButton(
+              icon: Icon(Icons.search,color: Colors.white,),
+            )
           )
         ],
       ),

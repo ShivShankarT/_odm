@@ -59,7 +59,7 @@ class InvoiceWidget extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Text(
-                        '${data.currencySymbol}${data.invoiceTotal}',
+                        '${data.currencySymbol} ' ' ${data.invoiceTotal}',
                         style: TextStyle(color: Colors.grey),
                       ),
                       Padding(

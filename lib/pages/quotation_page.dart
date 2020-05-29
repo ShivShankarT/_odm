@@ -19,6 +19,7 @@ class _QuotationPageState extends State<QuotationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Center(child: Text("Quotations")),
         actions: [
           InkWell(
             onTap: () {
@@ -31,8 +32,9 @@ class _QuotationPageState extends State<QuotationPage> {
                 quotationStore.loadQuotations();
               });
             },
-            child: Icon(Icons.search),
-          )
+            child: IconButton(
+              icon: Icon(Icons.search,color: Colors.white,),),
+          ),
         ],
       ),
       body: Consumer<QuotationStore>(builder: (context, store, _) {

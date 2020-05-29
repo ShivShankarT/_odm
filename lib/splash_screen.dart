@@ -32,9 +32,9 @@ class _SplashScreenState extends State<SplashScreen> {
     startTimer();
   }
 
-  startTimer() async {
+ Future<Timer> startTimer() async {
     var duration = Duration(seconds: 3);
-    return new Timer(duration, route);
+    return  Timer(duration, route);
   }
 
 
@@ -45,18 +45,19 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           children: <Widget>[
             aboveSection,
-           Loader(),
+           //CircularProgressIndicator(),
+           //Loader(),
           ],
         ),
       ),
         );
   }
-  route() async{
+ Future route() async{
     SharedPreferences sharedPreferences =await SharedPreferences.getInstance();
     String token = sharedPreferences.getString("Access_Token");
 
     Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => token == null ?Login():SideBarLayout()
+        builder: (context) =>token == null ?Login():SideBarLayout()
     )
     );
   }

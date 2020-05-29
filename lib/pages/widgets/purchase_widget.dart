@@ -61,7 +61,7 @@ class PurchaseWidget extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Text(
-                        '${purchaseData.currencySymbol}${purchaseData.porderTotal}',
+                        '${purchaseData.currencySymbol} ' ' ${purchaseData.porderTotal}',
                         style: TextStyle(color: Colors.grey),
                       ),
                       Padding(

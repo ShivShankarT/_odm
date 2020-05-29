@@ -90,10 +90,10 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
       builder: (context, isSideBarOpenedAsync) {
         return AnimatedPositioned (
           duration: _animationDuration,
-          top: 0,
+          top: -15,
           bottom: 0,
           left: isSideBarOpenedAsync.data ? 0 : -screenWidth,
-          right: isSideBarOpenedAsync.data ? 0 : screenWidth - 45,
+          right: isSideBarOpenedAsync.data ? 0 : screenWidth - 35,
           child: Row(
             children: <Widget>[
               Expanded(
@@ -110,12 +110,12 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           child: ListTile(
                             title: Text ('$fName' ' ' '$lName', style: TextStyle(
                               color: Color(0xFF1BB5FD),
-                              fontSize: 15,
+                              fontSize: 20
                             ),),
                             subtitle: Text( '$email',
                               style: TextStyle(
                                 color: Color(0xFF1BB5FD),
-                                fontSize: 15,
+                                fontSize: 17,
                               ),
                             ),
                             leading: CircleAvatar(
@@ -206,22 +206,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                                   Color.fromRGBO(52, 138, 199, 1.0)
                                 ]),
                               ),
-                              DialogButton(
-                                child: Text(
-                                  "YES",
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => _logout(),
-                                gradient: LinearGradient(colors: [
-                                  Color.fromRGBO(116, 116, 191, 1.0),
-                                  Color.fromRGBO(52, 138, 199, 1.0)
-                                ]),
-                              )
                             ],
-                          ).show();
-                          onIconPressed () => Navigator.pop(context);
-
-                        /*  BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);*/
+                          );
                         },
                       ),
                     ],

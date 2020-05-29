@@ -87,7 +87,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               style: TextStyle(
                                   fontSize: 22,
                                   height: 2,
-                                  color: const Color(0xFF262AAA)),
+                                  color: Colors.white),
                             ),
                           ],
                         ),

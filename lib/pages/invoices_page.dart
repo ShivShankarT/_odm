@@ -23,6 +23,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Center(child: Text("Invoice")),
           actions: [
             InkWell(
               onTap: () {
@@ -35,7 +36,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
                   invoiceStore.loadInvoice();
                 });
               },
-              child: Icon(Icons.search),
+              child:IconButton(icon: Icon(Icons.search,color: Colors.white,),),
             )
           ],
         ),

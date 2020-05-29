@@ -31,6 +31,7 @@ class _PurchageOrderpageState extends State<PurchageOrderpage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          title: Center(child: Text("Purchase Order")),
           actions: [
             InkWell(
               onTap: () {
@@ -43,7 +44,7 @@ class _PurchageOrderpageState extends State<PurchageOrderpage> {
                   purchaseStore.loadPurchase();
                 });
               },
-              child: Icon(Icons.search),
+              child:IconButton(icon: Icon(Icons.search,color: Colors.white,),),
             )
           ],
         ),
