@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:odm/models/purchase_response.dart';
 import 'package:odm/pages/purchase_details.dart';
 import 'package:odm/pages/widgets/purchase_widget.dart';
+import 'package:odm/search_delegate/purchase_search_delegate.dart';
 import 'package:odm/store/purchase_store.dart';
 import 'package:provider/provider.dart';
 
@@ -28,22 +29,41 @@ class _PurchageOrderpageState extends State<PurchageOrderpage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PurchaseStore>(
-        builder: (context, store, _) {
-          if (store.loading == false && store.purchaseOrderResponse == null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              store.loadPurchase();
-            });
+    return Scaffold(
+        appBar: AppBar(
+          actions: [
+            InkWell(
+              onTap: () {
+                PurchaseStore purchaseStore =
+                Provider.of<PurchaseStore>(context, listen: false);
+                showSearch(
+                    context: context,
+                    delegate: PurchaseSearchDelegate(purchaseStore))
+                    .then((value) {
+                  purchaseStore.loadPurchase();
+                });
+              },
+              child: Icon(Icons.search),
+            )
+          ],
+        ),
+      body: Consumer<PurchaseStore>(
+          builder: (context, store, _) {
+            if (store.loading == false && store.purchaseOrderResponse == null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                store.loadPurchase();
+              });
+            }
+            return store.loading || store.purchaseOrderResponse == null ?
+            Center(child: CircularProgressIndicator(),)
+                : ListView.builder(
+              itemCount: store.purchaseOrderResponse.data.length,
+              itemBuilder: (context, index) =>
+                  PurchaseWidget(
+                    purchaseData: store.purchaseOrderResponse.data[index],),
+            );
           }
-          return store.loading || store.purchaseOrderResponse == null ?
-          Center(child: CircularProgressIndicator(),)
-              : ListView.builder(
-            itemCount: store.purchaseOrderResponse.data.length,
-            itemBuilder: (context, index) =>
-                PurchaseWidget(
-                  purchaseData: store.purchaseOrderResponse.data[index],),
-          );
-        }
+      ),
     );
   }
 }

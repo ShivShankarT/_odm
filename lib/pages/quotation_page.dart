@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odm/login_screen.dart';
 import 'package:odm/navigation_bloc.dart';
-import 'package:odm/pages/widgets/flutter_search_delegate.dart';
+import 'package:odm/search_delegate/flutter_search_delegate.dart';
 import 'package:odm/pages/widgets/quotation_widget.dart';
 import 'package:odm/store/quotation_store.dart';
 import 'package:provider/provider.dart';

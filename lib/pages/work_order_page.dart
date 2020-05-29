@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:odm/models/quotation_response.dart';
 import 'package:odm/models/work_order_response.dart';
 import 'package:odm/navigation_bloc.dart';
-import 'package:odm/pages/widgets/flutter_search_delegate.dart';
+import 'package:odm/search_delegate/flutter_search_delegate.dart';
 import 'package:odm/pages/widgets/quotation_widget.dart';
 import 'package:odm/pages/widgets/work_order_details_wedget.dart';
 import 'package:odm/pages/widgets/work_order_widget.dart';

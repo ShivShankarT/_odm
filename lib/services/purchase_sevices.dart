@@ -19,6 +19,17 @@ class PurchaseService {
       return PurchaseOrderResponse.fromJson(jsonDecode(result.body));
 
   }
+  static Future<PurchaseOrderResponse> purchaseOrderFilter(String query)async{
+    final prefs = await SharedPreferences.getInstance();
+    final counter = prefs.getString('Access_Token') ?? 0;
+    final Map<String, String> headers = {
+      "access-token": counter
+    };
+    final result =await http.get(otpUrl+"?search=$query",  headers:headers);
+    if(result.statusCode == 200 && result.body!=null)
+      return PurchaseOrderResponse.fromJson(jsonDecode(result.body));
+    return null;
+  }
 
 
  }
