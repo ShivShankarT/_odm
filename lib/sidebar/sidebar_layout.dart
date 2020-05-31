@@ -4,7 +4,7 @@ import 'package:odm/pages/home_page.dart';
 import 'package:odm/sidebar/sidebar.dart';
 
 import '../navigation_bloc.dart';
-class SideBarScreen extends StatelessWidget {
+class SideBarLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -215,11 +215,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   }
                                 else {
                                   _scaffoldKey.currentState.removeCurrentSnackBar();
-
                                   changePassword(currentPassword: _currentPasswordController.text,newPassword: _passwordController.text,mobile: "1");
                                   Navigator.pushAndRemoveUntil(
                                     context,
-                                    MaterialPageRoute(builder: (context) => SideBarScreen()),
+                                    MaterialPageRoute(builder: (context) => SideBarLayout()),
                                         (Route<dynamic> route) => false,
                                   );
                                   SnackBar snackBar= new SnackBar(content: Text("Password Updated:"),);

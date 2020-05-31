@@ -2,25 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:odm/login_screen.dart';
-import 'package:odm/models/otp_response.dart';
-import 'package:odm/services/logout_service.dart';
-import 'package:odm/sidebar/sidebar_layout.dart';
-import 'package:odm/splash_screen.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:odm/pages/logout_sreen.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../main.dart';
 import '../menu_item.dart';
 import '../navigation_bloc.dart';
 
 
 class SideBar extends StatefulWidget  {
-  var myName=TextEditingController();
-
-
-
-
   @override
   _SideBarState createState() => _SideBarState();
 }
@@ -30,9 +19,6 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
   String fName;
   String lName;
   String email;
-
-
-
   AnimationController _animationController;
   StreamController<bool> isSidebarOpenedStreamController;
   Stream<bool> isSidebarOpenedStream;
@@ -163,7 +149,6 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                       MenuItem(
                         icon: Icons.event_note,
                         title: "Purchase Order",
-
                         onTap: () {
                           onIconPressed();
                           BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyPurchaseOrderClickedEvent);
@@ -190,9 +175,9 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         icon: Icons.exit_to_app,
                         title: "Logout",
                         onTap: () {
-                          onIconPressed(
-                          );
-                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);
+                          onIconPressed();
+                          showGeneralDialog(context: context, pageBuilder: (_,animation,___)=>
+                              ScaleTransition(scale:animation,child: Logout()), barrierDismissible: true, barrierLabel: "LogOut", transitionDuration: Duration(milliseconds: 500));
                         },
                       ),
                     ],

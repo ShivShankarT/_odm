@@ -31,14 +31,8 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    createFileOfPdfUrl(widget.id).then((f) {
-      setState(() {
-        pathPDF = f.path;
-        print(pathPDF);
-      });
-    });
   }
-
+  bool downloading = false;
   static const String otpUrl = "http://api.odm.esecdev.com/purchase/order/";
 
   Future<File> createFileOfPdfUrl(id) async {
@@ -57,19 +51,23 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
     //  final url = "http://africau.edu/images/default/sample.pdf";
 
     print(url);
-    final filename = url.substring(url.lastIndexOf("/") + 1);
-    var request = await HttpClient().getUrl(Uri.parse(url));
-    request.headers.set("access-token", counter);
-    // final result = await HttpClient().addCredentials(url, realm, credentials);
-    // final response = await http.get("$otpUrl$id" + "pdf", headers: headers);
-
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
+    final filename = "purchase_detail_${widget.id}.pdf";
     String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    print(file);
-    return file;
+    print(dir);
+    File file = File('$dir/$filename');
+    if(!(await file.exists())) {
+      var request = await HttpClient().getUrl(Uri.parse(url));
+      request.headers.set("access-token", counter);
+      // final result = await HttpClient().addCredentials(url, realm, credentials);
+      // final response = await http.get("$otpUrl$id" + "pdf", headers: headers);
+
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+      file = new File('$dir/$filename');
+      await file.writeAsBytes(bytes);
+      print(file);
+      return file;
+    } else return file;
   }
 
   @override
@@ -132,17 +130,25 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                                             "Purchase Order Details",
                                             style: TextStyle(fontSize: 20),
                                           ),
-                                          IconButton(
+                                          downloading? CircularProgressIndicator():IconButton(
                                               icon: Icon(Icons.picture_as_pdf),
                                               iconSize: 30,
                                               color: Colors.white,
                                               onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          PDFScreen(pathPDF)),
-                                                );
+                                                setState(() {
+                                                  downloading = true;
+                                                });
+                                                createFileOfPdfUrl(widget.id).then((f) {
+                                                  setState(() {
+                                                    downloading = false;
+                                                  });
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PDFScreen(f.path)),
+                                                  );
+                                                });
                                               }),
                                         ],
                                       ),
@@ -359,7 +365,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
 }
 
 class PDFScreen extends StatelessWidget {
-  String pathPDF = "";
+  final String pathPDF;
 
   PDFScreen(this.pathPDF);
 
@@ -368,12 +374,6 @@ class PDFScreen extends StatelessWidget {
     return PDFViewerScaffold(
         appBar: AppBar(
           title: Text("Document"),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: () {},
-            ),
-          ],
         ),
         path: pathPDF);
   }

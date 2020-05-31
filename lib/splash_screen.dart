@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen> {
     print(token ?? "null token found");
 
     Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => (token == null || isTokenValid()==true) ? Login() : SideBarScreen()
+        builder: (context) => (token == null || isTokenValid()==true) ? Login() : SideBarLayout()
     )
     );
   }

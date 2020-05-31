@@ -64,12 +64,13 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
 
-        initialRoute: '/',
+        initialRoute: 'home',
         routes: {
-          '/login': (BuildContext context) => LoginScreen(),
-          '/otp':(BuildContext context)=> OtpVerification(),
-          '/sidebar':(BuildContext context)=> SideBarScreen(),
-          '/logout':(BuildContext context)=> Logout(),
+          'home': (BuildContext context) => SplashScreen(),
+          'login': (BuildContext context) => LoginScreen(),
+          'otp':(BuildContext context)=> OtpVerification(),
+          'sidebar':(BuildContext context)=> SideBarLayout(),
+          'logout':(BuildContext context)=> Logout(),
 
         },
         home:SplashScreen(

@@ -31,6 +31,8 @@ class LoginStore extends ChangeNotifier{
   }
   reset(){
     isLoggingIn = false;
+    loginData = null;
+    error = null;
   }
 
 }

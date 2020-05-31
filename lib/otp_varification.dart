@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odm/services/otp_service.dart';
+import 'package:odm/sidebar/sidebar.dart';
 import 'package:odm/sidebar/sidebar_layout.dart';
 import 'package:odm/splash_screen.dart';
 import 'package:odm/store/login_store.dart';
@@ -121,10 +122,9 @@ class _OtpVerificationState extends State<OtpVerification> {
                                   print(required.toJson());
                                 }
                                 print("OTP OTP OTP SCREEN >>>>>> screen .........");
-                                Navigator.push(
-                                  context,
+                                Navigator.pushReplacement(context,
                                   MaterialPageRoute(
-                                      builder: (context) => SideBarScreen()),
+                                      builder: (context) => SideBarLayout()),
                                  // (Route<dynamic> route) => false,
                                 );
                                 print("OTP OTP OTP SCREEN >>>>>> after Nagivator .........");

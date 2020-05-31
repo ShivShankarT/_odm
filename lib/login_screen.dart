@@ -31,8 +31,8 @@ class Login extends StatefulWidget {
 
 class _MyHomePageState extends State<Login> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  final myEmailController = TextEditingController();
-  final myPasswordController = TextEditingController();
+  final myEmailController = TextEditingController(text: "shiv");
+  final myPasswordController = TextEditingController(text: "Shiv@54321");
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   final GlobalKey<FormState> formKey = GlobalKey();
   @override
@@ -47,6 +47,8 @@ class _MyHomePageState extends State<Login> {
     return Consumer<LoginStore>(
         builder: (context, store, widget) {
           if(store.loginData!=null){
+
+
             WidgetsBinding.instance.addPostFrameCallback((_){
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>
                   OtpVerification(),));
@@ -161,6 +163,9 @@ class _MyHomePageState extends State<Login> {
       sharedPreferences.setString("PASSWORD", password);
 
       print(sharedPreferences.getString("PASSWORD"));
+
+
+
       loginStore.login(user, password, "1");
     }
   }
