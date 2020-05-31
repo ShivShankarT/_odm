@@ -42,7 +42,7 @@ class _QDetailsScreenState extends State<QDetailsScreen> {
 
   Future<File> createFileOfPdfUrl(id) async {
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
       print("Downloading...");
       final url = '$otpUrl$id''/pdf';
       final filename = url.substring(url.lastIndexOf("/") + 1);

@@ -8,7 +8,7 @@ class ChangePasswordService{
   static const String otpUrl = "http://api.odm.esecdev.com/password";
   static Future<ChangePasswordResponse> changePassword({String currentPassword, String newPassword, String mobile})async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("here is the AcessToken value");
     print(counter);
     final Map<String, String> headers = {

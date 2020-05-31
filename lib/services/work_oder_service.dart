@@ -7,7 +7,7 @@ class WorkOrderService{
   static const String otpUrl = "http://api.odm.esecdev.com/work/order";
   static Future<WorkOrderResponse> workOrder()async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("WO Service is running ....");
     print(counter);
     final Map<String, String> headers = {
@@ -22,7 +22,7 @@ class WorkOrderService{
 
   static Future<WorkOrderResponse> workOrderFilter(String query)async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     final Map<String, String> headers = {
       "access-token": counter
     };

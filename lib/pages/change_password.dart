@@ -7,7 +7,6 @@ import 'package:flutter/painting.dart';
 import 'package:odm/models/change_password_response.dart';
 import 'package:odm/navigation_bloc.dart';
 import 'package:odm/services/changer_password_service.dart';
-import 'package:odm/shared_pref_demo.dart';
 import 'package:odm/sidebar/sidebar.dart';
 import 'package:odm/sidebar/sidebar_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -100,6 +99,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     margin: EdgeInsets.all(20),
                     width: 3 * width / 4,
                     child: TextFormField(
+                      obscureText: true,
                         controller: _currentPasswordController,
                         onFieldSubmitted: (_) =>
                             FocusScope.of(context)
@@ -142,6 +142,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     margin: EdgeInsets.all(20),
                     width: 3 * width / 4,
                     child: TextFormField(
+                      obscureText: true,
                         onFieldSubmitted: (_) =>
                             FocusScope.of(context).unfocus(),
                         controller: _confirmPasswordController,
@@ -172,6 +173,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           onPressed: () async {
                             if(_globalKey.currentState.validate())
                               {
+                                _scaffoldKey.currentState.removeCurrentSnackBar();
                                 String cc=_sharedPrefPass;
                                 String bb=_currentPasswordController.text;
                                 print(cc);
@@ -179,6 +181,9 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                                 // ignore: unrelated_type_equality_checks
                                 if(cc !=bb) {
+                                  _scaffoldKey.currentState.removeCurrentSnackBar();
+
+
                                   print(' if(_sharedPrefPass != (_currentPasswordController.text != null)) {');
                                   print(_sharedPrefPass);
                                   print(_currentPasswordController.text);
@@ -189,6 +194,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     _scaffoldKey.currentState.showSnackBar(snackBar);
                                   }
                                 else if ( _passwordController.text !=_confirmPasswordController.text){
+                                  _scaffoldKey.currentState.removeCurrentSnackBar();
+
                                   print('fale in  passwordController.text !=_confirmPasswordController.text');
                                   print(_sharedPrefPass);
                                   print(_currentPasswordController.text);
@@ -201,15 +208,18 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                                 else if( _sharedPrefPass==_passwordController.text || _sharedPrefPass==_confirmPasswordController.text)
                                   {
+                                    _scaffoldKey.currentState.removeCurrentSnackBar();
+
                                     SnackBar snackBar= new SnackBar(content: Text("New Password should be Different"),);
                                     _scaffoldKey.currentState.showSnackBar(snackBar);
                                   }
                                 else {
+                                  _scaffoldKey.currentState.removeCurrentSnackBar();
 
                                   changePassword(currentPassword: _currentPasswordController.text,newPassword: _passwordController.text,mobile: "1");
                                   Navigator.pushAndRemoveUntil(
                                     context,
-                                    MaterialPageRoute(builder: (context) => SideBarLayout()),
+                                    MaterialPageRoute(builder: (context) => SideBarScreen()),
                                         (Route<dynamic> route) => false,
                                   );
                                   SnackBar snackBar= new SnackBar(content: Text("Password Updated:"),);
@@ -234,7 +244,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   static const String otpUrl = "http://api.odm.esecdev.com/password";
   static Future<ChangePasswordResponse> changePassword({String currentPassword, String newPassword, String mobile})async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("here is the AcessToken value");
     print(counter);
     final Map<String, String> headers = {

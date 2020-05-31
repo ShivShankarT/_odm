@@ -55,5 +55,9 @@ class PurchaseStore extends ChangeNotifier{
     searchLoading=_loading;
     notifyListeners();
   }
+  reset(){
+    bool loading = false;
+    bool loadingSearch = false;
 
+  }
 }

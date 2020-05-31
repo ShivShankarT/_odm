@@ -48,9 +48,8 @@ class _MyHomePageState extends State<Login> {
         builder: (context, store, widget) {
           if(store.loginData!=null){
             WidgetsBinding.instance.addPostFrameCallback((_){
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (_)=>OtpVerification()
-              ));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>
+                  OtpVerification(),));
             });
           } else if(store.error!=null){
             WidgetsBinding.instance.addPostFrameCallback((_){
@@ -97,7 +96,7 @@ class _MyHomePageState extends State<Login> {
                             ),
                             SizedBox(height: 25.0),
                             TextFormField(
-                              obscureText: false,
+                              obscureText: true,
                               controller: myPasswordController,
                               onFieldSubmitted: (_) =>
                                   FocusScope.of(context)
@@ -158,7 +157,9 @@ class _MyHomePageState extends State<Login> {
     if(formKey.currentState.validate()) {
       String user = myEmailController.text.trim();
       String password = myPasswordController.text.trim();
+      sharedPreferences.setString("userId", password);
       sharedPreferences.setString("PASSWORD", password);
+
       print(sharedPreferences.getString("PASSWORD"));
       loginStore.login(user, password, "1");
     }

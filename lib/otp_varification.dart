@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:odm/services/otp_service.dart';
 import 'package:odm/sidebar/sidebar_layout.dart';
+import 'package:odm/splash_screen.dart';
 import 'package:odm/store/login_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'models/otp_response.dart';
 
 class OtpVerification extends StatefulWidget {
@@ -79,22 +79,23 @@ class _OtpVerificationState extends State<OtpVerification> {
                           minWidth: MediaQuery.of(context).size.width / 2,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: () async {
+                            SnackBar snackBar = new SnackBar(
+                              content: Text(
+                                  "Check Your Email."),
+                            );
+
+                          //  _scaffoldKey.currentState.removeCurrentSnackBar();
                             SharedPreferences sharedPref =
                                 await SharedPreferences.getInstance();
                             String otpValue = sharedPref.getString("otp");
+
                             print("this otp is form response:");
                             print(otpValue);
                             print("this otp is form user Input:");
                             print(myOtpController.text);
+
                             if (_globalKey.currentState.validate()) {
                               if (otpValue != myOtpController.text) {
-                                print(
-                                    ' if(_sharedPrefPass != (_currentPasswordController.text != null)) {');
-
-                                SnackBar snackBar = new SnackBar(
-                                  content: Text(
-                                      "Check Your Email."),
-                                );
                                 _scaffoldKey.currentState
                                     .showSnackBar(snackBar);
                               }
@@ -102,7 +103,6 @@ class _OtpVerificationState extends State<OtpVerification> {
 
                             setState(() {
                               otp = myOtpController.text;
-                              print(otp);
                             });
                             final x = await OtpService.otp(otp: otp);
                             print(x.toJson());
@@ -120,15 +120,28 @@ class _OtpVerificationState extends State<OtpVerification> {
 
                                   print(required.toJson());
                                 }
-                                print("running otp screen .........");
-                                Navigator.pushAndRemoveUntil(
+                                print("OTP OTP OTP SCREEN >>>>>> screen .........");
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => SideBarLayout()),
-                                  (Route<dynamic> route) => false,
+                                      builder: (context) => SideBarScreen()),
+                                 // (Route<dynamic> route) => false,
                                 );
+                                print("OTP OTP OTP SCREEN >>>>>> after Nagivator .........");
+
                               }
+                              if(error==true && (otpValue == myOtpController.text) )
+                                {
+                                  _scaffoldKey.currentState.removeCurrentSnackBar();
+                                  SnackBar otpExpieryMessage = new SnackBar(
+                                    content: Text(
+                                        "OTP has Expired ! Please Login Again."),
+                                  );
+                                  _scaffoldKey.currentState
+                                      .showSnackBar(otpExpieryMessage);
+                                }
                             }
+
                           },
                           child: Text(
                             "Submit",

@@ -6,7 +6,7 @@ class QuotationService{
   static const String otpUrl = "http://api.odm.esecdev.com/quotation";
   static Future<QuotationResponse> quotation()async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("Quotation Service is running...");
     print("here is the AcessToken value");
     print(counter);
@@ -22,7 +22,7 @@ class QuotationService{
   }
   static Future<QuotationResponse> quotationFilter(String query)async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("Quotation Service is running...");
     print("here is the AcessToken value");
     print(counter);

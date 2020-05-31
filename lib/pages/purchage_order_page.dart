@@ -5,7 +5,9 @@ import 'package:odm/pages/widgets/purchase_widget.dart';
 import 'package:odm/search_delegate/purchase_search_delegate.dart';
 import 'package:odm/store/purchase_store.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../login_screen.dart';
 import '../navigation_bloc.dart';
 class PurchageOrderpage extends StatefulWidget with NavigationStates {
   @override
@@ -55,6 +57,15 @@ class _PurchageOrderpageState extends State<PurchageOrderpage> {
                 store.loadPurchase();
               });
             }
+
+            if (store.error?.toLowerCase() == "invalid token." || store.error == "Not logged in."  ) {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+                await logout(context);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                        (route) => false);
+              });
+            }
             return store.loading || store.purchaseOrderResponse == null ?
             Center(child: CircularProgressIndicator(),)
                 : ListView.builder(
@@ -67,4 +78,14 @@ class _PurchageOrderpageState extends State<PurchageOrderpage> {
       ),
     );
   }
+}
+
+
+logout(BuildContext context) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+   sharedPreferences.setString("Access_Token",null);
+ print(" Purchase ORDER >>>>> I set access Token value : NULL");
+  PurchaseStore purchaseStore =
+  Provider.of<PurchaseStore>(context, listen: false);
+  purchaseStore.reset();
 }

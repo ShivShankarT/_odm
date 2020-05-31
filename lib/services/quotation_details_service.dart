@@ -12,7 +12,7 @@ class QDetailsService {
 
   static Future<QuotationDetailsResponse> quotationDetails(int id) async {
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("Quotation Service is running...");
     print("here is the AccessToken value");
     print(counter);
@@ -29,7 +29,7 @@ class QDetailsService {
 
   static Future<QuotationDetailsResponse> quotationDetailsPdf(int id) async {
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print(counter);
     final Map<String, String> headers = {
       "access-token": counter

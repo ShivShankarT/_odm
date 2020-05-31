@@ -7,7 +7,7 @@ class WorkOrderDetailsService{
   static const String otpUrl = "http://api.odm.esecdev.com/work/order/";
   static Future<WorkOrderDetailsResponse> workOrderDetails(int id)async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("Work Service is running...");
     print("here is the AcessToken value");
     print(counter);

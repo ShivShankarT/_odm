@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:odm/login_screen.dart';
+import 'package:odm/otp_varification.dart';
+import 'package:odm/pages/logout_sreen.dart';
+import 'package:odm/sidebar/sidebar_layout.dart';
 import 'package:odm/splash_screen.dart';
 import 'package:odm/store/WorkOrderDetailsStore.dart';
 import 'package:odm/store/change_password_store.dart';
@@ -18,6 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
+
       providers: [
         ChangeNotifierProvider<LoginStore>(
           create: (_)=>LoginStore(),
@@ -54,11 +59,19 @@ class MyApp extends StatelessWidget {
 
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+
+        initialRoute: '/',
+        routes: {
+          '/login': (BuildContext context) => LoginScreen(),
+          '/otp':(BuildContext context)=> OtpVerification(),
+          '/sidebar':(BuildContext context)=> SideBarScreen(),
+          '/logout':(BuildContext context)=> Logout(),
+
+        },
         home:SplashScreen(
 
         ),

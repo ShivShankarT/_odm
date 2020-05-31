@@ -44,7 +44,7 @@ class _InvoiceDetailsWidgetState extends State<InvoiceDetailsWidget> {
 
   Future<File> createFileOfPdfUrl(id) async {
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print(counter);
     final Map<String, String> headers = {"access-token": counter};
 

@@ -10,6 +10,7 @@ import 'package:odm/splash_screen.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 import '../menu_item.dart';
 import '../navigation_bloc.dart';
 
@@ -189,39 +190,9 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         icon: Icons.exit_to_app,
                         title: "Logout",
                         onTap: () {
-                          Alert(
-                            context: context,
-                            type: AlertType.warning,
-                            title: "Logout?",
-                            desc: "Do you really wanna logout",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "NO",
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                                gradient: LinearGradient(colors: [
-                                  Color.fromRGBO(116, 116, 191, 1.0),
-                                  Color.fromRGBO(52, 138, 199, 1.0)
-                                ]),
-                              ),
-                              DialogButton(
-                                child: Text(
-                                  "YES",
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => _logout(),
-                                gradient: LinearGradient(colors: [
-                                  Color.fromRGBO(116, 116, 191, 1.0),
-                                  Color.fromRGBO(52, 138, 199, 1.0)
-                                ]),
-                              )
-                            ],
-                          ).show();
                           onIconPressed(
                           );
-                          /*  BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);*/
+                          BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MyLogoutClickedEvent);
                         },
                       ),
                     ],
@@ -258,31 +229,7 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
     );
   }
 
-  _logout() async {
 
-    final x = await LogoutService.logout();
-    if(x.message=="Invalid token."){
-      Navigator.pop(
-        context,
-        MaterialPageRoute(builder: (context) => Login()),
-
-      );
-
-    }
-    if (x != null) {
-      final error = x.error;
-      if (error == false) {
-        print("running changePassword screen .........");
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Login()),
-              (Route<dynamic> route) => false,
-        );
-      }
-
-    }
-
-    }
   }
 
 

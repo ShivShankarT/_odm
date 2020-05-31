@@ -7,7 +7,7 @@ class PurchaseService {
   // ignore: missing_return
   Future<PurchaseOrderResponse> purchase() async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("Quotation Service is running...");
     print("here is the AcessToken value");
     print(counter);
@@ -21,7 +21,7 @@ class PurchaseService {
   }
   static Future<PurchaseOrderResponse> purchaseOrderFilter(String query)async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     final Map<String, String> headers = {
       "access-token": counter
     };

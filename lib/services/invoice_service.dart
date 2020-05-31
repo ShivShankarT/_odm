@@ -6,7 +6,7 @@ class InvoiceService{
   static const String otpUrl = "http://api.odm.esecdev.com/invoice/";
   static Future<InvoiceResponse> invoice()async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     print("Quotation Service is running...");
     print("here is the AcessToken value");
     print(counter);
@@ -22,7 +22,7 @@ class InvoiceService{
 
   static Future<InvoiceResponse> invoiceFilter(String query)async{
     final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getString('Access_Token') ?? 0;
+    final counter = prefs.getString('Access_Token');
     final Map<String, String> headers = {
       "access-token": counter
     };
