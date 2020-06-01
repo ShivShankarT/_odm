@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:odm/loader.dart';
 import 'package:odm/login_screen.dart';
 import 'package:odm/sidebar/sidebar_layout.dart';
 import 'package:odm/store/login_store.dart';
@@ -45,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     height: 200,
                   ),
                 )),
+         //   Loader(),
             // Loader(),
           ],
         ),

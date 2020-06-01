@@ -13,6 +13,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -31,8 +32,10 @@ class Login extends StatefulWidget {
 
 class _MyHomePageState extends State<Login> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  final myEmailController = TextEditingController(text: "shiv");
-  final myPasswordController = TextEditingController(text: "Shiv@54321");
+ /*final myEmailController = TextEditingController(text: "shiv");
+  final myPasswordController = TextEditingController(text: "Shiv@54321");*/
+  final myEmailController = TextEditingController();
+  final myPasswordController = TextEditingController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   final GlobalKey<FormState> formKey = GlobalKey();
   @override

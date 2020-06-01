@@ -7,10 +7,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
 import 'package:http/http.dart' as http;
 import 'package:odm/models/invoice_details_response.dart';
-import 'package:odm/models/quotation_details_response.dart';
 import 'package:odm/pages/quotation_page.dart';
 import 'package:odm/store/invoice_details_store.dart';
-import 'package:odm/store/quotation_details_store.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,8 +25,9 @@ class InvoiceDetailsWidget extends StatefulWidget {
 
 class _InvoiceDetailsWidgetState extends State<InvoiceDetailsWidget> {
   String pathPDF = "";
+  bool isDownloading=false;
 
-  @override
+ /* @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -38,7 +37,7 @@ class _InvoiceDetailsWidgetState extends State<InvoiceDetailsWidget> {
         print(pathPDF);
       });
     });
-  }
+  }*/
 
   static const String otpUrl = "http://api.odm.esecdev.com/invoice/";
 
@@ -47,29 +46,22 @@ class _InvoiceDetailsWidgetState extends State<InvoiceDetailsWidget> {
     final counter = prefs.getString('Access_Token');
     print(counter);
     final Map<String, String> headers = {"access-token": counter};
-
-    print("here is header:"); print(headers);
-    //   final result = await http.get("$otpUrl$id" + "pdf", headers: headers);
-    //  if (result.statusCode == 200 && result.body != null) {
-    print("Downloading...");
     final url = '$otpUrl$id''/pdf';
-    // final url="http://api.odm.esecdev.com/quotation/153/pdf";
-    //  final url = "http://africau.edu/images/default/sample.pdf";
-
-    print(url);
-    final filename = url.substring(url.lastIndexOf("/") + 1);
-    var request = await HttpClient().getUrl(Uri.parse(url));
-    request.headers.set("access-token", counter);
-    // final result = await HttpClient().addCredentials(url, realm, credentials);
-    // final response = await http.get("$otpUrl$id" + "pdf", headers: headers);
-
-    var response = await request.close();
-    var bytes = await consolidateHttpClientResponseBytes(response);
+    final filename = "invoice_${widget.id}.pdf";
     String dir = (await getApplicationDocumentsDirectory()).path;
     File file = new File('$dir/$filename');
-    await file.writeAsBytes(bytes);
-    print(file);
-    return file;
+    if(!( await file.exists())){
+
+      var request = await HttpClient().getUrl(Uri.parse(url));
+      request.headers.set("access-token", counter);
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+
+      await file.writeAsBytes(bytes);
+      print(file);
+      return file;
+    } else return file;
+
   }
 
 
@@ -123,17 +115,31 @@ class _InvoiceDetailsWidgetState extends State<InvoiceDetailsWidget> {
                                   "Invoice Details",
                                   style: TextStyle(fontSize: 20),
                                 ),
-                                IconButton(
+                             isDownloading ? CircularProgressIndicator(
+                               backgroundColor: Colors.white,
+                               strokeWidth: 2,
+                             ): IconButton(
                                     icon: Icon(Icons.picture_as_pdf),
                                     iconSize: 30,
                                     color: Colors.white,
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                PDFScreen(pathPDF)),
-                                      );
+                                      setState(() {
+                                        isDownloading=true;
+                                      });
+
+                                      createFileOfPdfUrl(widget.id).then((f) {
+                                        setState(() {
+                                          isDownloading=false;
+                                        });
+
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PDFScreen(f.path)),
+                                        );
+                                      });
+
                                     }),
                               ],
                             ),

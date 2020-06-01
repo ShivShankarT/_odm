@@ -8,6 +8,7 @@ import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
 import 'package:odm/models/purchase_details_response.dart';
 import 'package:odm/pages/quotation_page.dart';
 import 'package:odm/store/purchase_details_store.dart';
+import 'package:odm/store/purchase_store.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,24 +44,14 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
 
     print("here is header:");
     print(headers);
-    //   final result = await http.get("$otpUrl$id" + "pdf", headers: headers);
-    //  if (result.statusCode == 200 && result.body != null) {
     print("Downloading...");
     final url = '$otpUrl$id' '/pdf';
-    // final url="http://api.odm.esecdev.com/quotation/153/pdf";
-    //  final url = "http://africau.edu/images/default/sample.pdf";
-
-    print(url);
     final filename = "purchase_detail_${widget.id}.pdf";
     String dir = (await getApplicationDocumentsDirectory()).path;
-    print(dir);
     File file = File('$dir/$filename');
     if(!(await file.exists())) {
       var request = await HttpClient().getUrl(Uri.parse(url));
       request.headers.set("access-token", counter);
-      // final result = await HttpClient().addCredentials(url, realm, credentials);
-      // final response = await http.get("$otpUrl$id" + "pdf", headers: headers);
-
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       file = new File('$dir/$filename');
@@ -81,7 +72,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
       if (store.error?.toLowerCase() == "invalid token." ||
           store.error == "Not logged in.") {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-          await logout(context);
+          await logoutforPurchase(context);
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => LoginScreen()),
               (route) => false);
@@ -130,7 +121,8 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                                             "Purchase Order Details",
                                             style: TextStyle(fontSize: 20),
                                           ),
-                                          downloading? CircularProgressIndicator():IconButton(
+                                          downloading? CircularProgressIndicator( backgroundColor: Colors.white,
+                                            strokeWidth: 2,):IconButton(
                                               icon: Icon(Icons.picture_as_pdf),
                                               iconSize: 30,
                                               color: Colors.white,
@@ -361,6 +353,18 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
         ],
       ),
     );
+  }
+
+  logoutforPurchase(BuildContext context)async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("Access_Token",null);
+    sharedPreferences.setString("userId", null);
+    sharedPreferences.setString("PASSWORD", null);
+
+    print(" Purchase ORDER >>>>> I set access Token value : NULL");
+    PurchaseStore purchaseStore =
+    Provider.of<PurchaseStore>(context, listen: false);
+    purchaseStore.reset();
   }
 }
 

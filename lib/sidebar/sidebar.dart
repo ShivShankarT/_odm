@@ -122,14 +122,14 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         indent: 32,
                         endIndent: 32,
                       ),
-                      MenuItem(
+                    /*  MenuItem(
                         icon: Icons.home,
                         title: "Home",
                         onTap: () {
                           onIconPressed();
                           BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickedEvent);
                         },
-                      ),
+                      ),*/
                       MenuItem(
                         icon: Icons.format_quote,
                         title: "Quotations",

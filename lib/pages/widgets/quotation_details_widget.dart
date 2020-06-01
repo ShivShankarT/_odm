@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_full_pdf_viewer/full_pdf_viewer_scaffold.dart';
-import 'package:http/http.dart' as http;
 import 'package:odm/models/quotation_details_response.dart';
 import 'package:odm/pages/quotation_page.dart';
 import 'package:odm/store/quotation_details_store.dart';
@@ -25,8 +24,9 @@ class QDetailsScreen extends StatefulWidget {
 
 class _QDetailsScreenState extends State<QDetailsScreen> {
   String pathPDF = "";
+  bool isDownloading = false;
 
-  @override
+/*  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -36,27 +36,28 @@ class _QDetailsScreenState extends State<QDetailsScreen> {
         print(pathPDF);
       });
     });
-  }
+  }*/
 
   static const String otpUrl = "http://api.odm.esecdev.com/quotation/";
 
   Future<File> createFileOfPdfUrl(id) async {
     final prefs = await SharedPreferences.getInstance();
     final counter = prefs.getString('Access_Token');
-      print("Downloading...");
-      final url = '$otpUrl$id''/pdf';
-      final filename = url.substring(url.lastIndexOf("/") + 1);
+    final url = '$otpUrl$id' '/pdf';
+    final filename = "quotation_details_${widget.id}.pdf";
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = new File('$dir/$filename');
+    if (!(await file.exists())) {
       var request = await HttpClient().getUrl(Uri.parse(url));
-          request.headers.set("access-token", counter);
+      request.headers.set("access-token", counter);
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
-      String dir = (await getApplicationDocumentsDirectory()).path;
-     File file = new File('$dir/$filename');
       await file.writeAsBytes(bytes);
       print(file);
       return file;
-    }
-
+    } else
+      return file;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,19 +109,35 @@ class _QDetailsScreenState extends State<QDetailsScreen> {
                                             "Quotation Details",
                                             style: TextStyle(fontSize: 20),
                                           ),
-                                          IconButton(
-                                              icon: Icon(Icons.picture_as_pdf),
-                                              iconSize: 30,
-                                              color: Colors.white,
-                                              onPressed: () {
+                                          isDownloading
+                                              ? CircularProgressIndicator( backgroundColor: Colors.white,
+                                            strokeWidth: 2,)
+                                              : IconButton(
+                                                  icon: Icon(
+                                                      Icons.picture_as_pdf),
+                                                  iconSize: 30,
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      isDownloading = true;
+                                                    });
 
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          PDFScreen(pathPDF)),
-                                                );
-                                              }),
+                                                    createFileOfPdfUrl(
+                                                            widget.id)
+                                                        .then((f) {
+                                                      setState(() {
+                                                        isDownloading = false;
+                                                      });
+
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                PDFScreen(f.path)),
+                                                      );
+
+                                                    });
+                                                  }),
                                         ],
                                       ),
                                     ),
@@ -338,6 +355,7 @@ class _QDetailsScreenState extends State<QDetailsScreen> {
 
 class PDFScreen extends StatelessWidget {
   String pathPDF = "";
+
   PDFScreen(this.pathPDF);
 
   @override

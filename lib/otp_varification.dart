@@ -39,6 +39,7 @@ class _OtpVerificationState extends State<OtpVerification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       key: _scaffoldKey,
         appBar: AppBar(
           title: Center(child: Text("Sign In OTP")),

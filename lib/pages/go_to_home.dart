@@ -9,12 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../login_screen.dart';
 import '../navigation_bloc.dart';
 
-class Logout extends StatefulWidget with NavigationStates {
+class GoToLoginPage extends StatefulWidget with NavigationStates {
   @override
-  _LogoutState createState() => _LogoutState();
+  _GoToLoginPageState createState() => _GoToLoginPageState();
 }
 
-class _LogoutState extends State<Logout> {
+class _GoToLoginPageState extends State<GoToLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -43,7 +43,7 @@ class _LogoutState extends State<Logout> {
                     sharedPref.setString("PASSWORD", null);
                     sharedPref.setString("Access_Token", null);
                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                      builder: (_)=>LoginScreen()
+                        builder: (_)=>LoginScreen()
                     ), (_)=>false);
                   }
                   if (error == true) {
@@ -61,15 +61,6 @@ class _LogoutState extends State<Logout> {
                 }
               },
               child: Text('Yes')),
-          Container(
-            width: 33,
-          ),
-          RaisedButton(onPressed: () {
-            Navigator.of(context).pop();
-               // (Route<dynamic> route) => false);
-
-
-          }, child: Text('No'))
         ],
       ),
     );

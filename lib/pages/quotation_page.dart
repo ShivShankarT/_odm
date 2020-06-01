@@ -9,6 +9,9 @@ import 'package:odm/store/quotation_store.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../menu_item.dart';
+import 'go_to_home.dart';
+
 class QuotationPage extends StatefulWidget with NavigationStates {
   @override
   _QuotationPageState createState() => _QuotationPageState();
@@ -43,14 +46,12 @@ class _QuotationPageState extends State<QuotationPage> {
             store.loadQuotations();
           });
         }
-        if (store.error?.toLowerCase() == "invalid token." || store.error == "Not logged in."  ) {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-            await logout(context);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-                (route) => false);
-          });
-        }
+       /* if (store.error?.toLowerCase() == "invalid token." || store.error == "Not logged in."  ) {
+          logoutForQuotation(context);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+              builder: (_)=>LoginScreen()
+          ), (_)=>false);
+        }*/
         return store.loading
             ? SafeArea(
                 child: Center(
@@ -77,11 +78,14 @@ class _QuotationPageState extends State<QuotationPage> {
   }
 }
 
-logout(BuildContext context) async {
+logoutForQuotation(BuildContext context) async {
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  var accessToken = sharedPreferences.getString("Access_Token");
-  accessToken = "1";
+  sharedPreferences.setString("Access_Token",null);
+  sharedPreferences.setString("userId", null);
+  sharedPreferences.setString("PASSWORD", null);
+
+  print(" Purchase ORDER >>>>> I set access Token value : NULL");
   QuotationStore quotationStore =
-      Provider.of<QuotationStore>(context, listen: false);
-    quotationStore.reset();
+  Provider.of<QuotationStore>(context, listen: false);
+  quotationStore.reset();
 }
