@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart'as http;
 import 'package:odm/models/quotation_details_response.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class QDetailsService {
 

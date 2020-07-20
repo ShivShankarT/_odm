@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:odm/loader.dart';
 import 'package:odm/otp_varification.dart';
 import 'package:odm/store/login_store.dart';
 import 'package:provider/provider.dart';
@@ -60,8 +59,7 @@ class _MyHomePageState extends State<Login> {
             WidgetsBinding.instance.addPostFrameCallback((_){
               showSnack(store.error);
               store.error = null;
-            });
-          }
+            });     }
           return Scaffold(
             key: scaffoldKey,
               body: SingleChildScrollView(
